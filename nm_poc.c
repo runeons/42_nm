@@ -13,21 +13,6 @@ void exit_error(char *msg)
     exit(1);
 }
 
-// void display_sym(struct symtab_command *sym, char *ptr)
-// {
-//     // printf("%d %d %d\n", sym->nsyms, sym->symoff, sym->stroff);
-//     int             i;
-//     char            *string_table;
-//     struct nlist_64 *array;
-    
-//     array = (void *)ptr + sym->symoff;
-//     string_table = (void *)ptr + sym->stroff;
-//     for (i = 0; i < sym->nsyms; i++)
-//     {
-//         printf("%s\n", string_table + array[i].n_un.n_strx);
-//     }
-// }
-
 #define PFsizeof    "lu"
 #define PFu_c8      "hhu"
 #define PFu_16      "hu"
@@ -95,6 +80,21 @@ void    print_sym(const Elf64_Sym h)
     printf("st_size     : %"PFu_64"\n", h.st_size);
 }
 
+// void display_sym(struct symtab_command *sym, char *ptr)
+// {
+//     // printf("%d %d %d\n", sym->nsyms, sym->symoff, sym->stroff);
+//     int             i;
+//     char            *string_table;
+//     struct nlist_64 *array;
+    
+//     array = (void *)ptr + sym->symoff;
+//     string_table = (void *)ptr + sym->stroff;
+//     for (i = 0; i < sym->nsyms; i++)
+//     {
+//         printf("%s\n", string_table + array[i].n_un.n_strx);
+//     }
+// }
+
 void handle_64(char *ptr)
 {
     printf("this is x64\n");
@@ -127,15 +127,17 @@ void handle_64(char *ptr)
     print_sheader(sections[i]);
     print_sym(*symtab);
 
-    int sym_nb = sections[i].sh_size / sections[i].sh_entsize;
+    int             sym_nb = sections[i].sh_size / sections[i].sh_entsize;
+    char            *string_table;
+
     printf("sym_nb = %d\n", sym_nb);
+    string_table = (void *)ptr + symtab->st_name;
 
-
-    // for (j = 0; j < sym_nb; j++)
-    // {
-    //     printf("%d\n", j);
-    //     print_sym(sections[i] + [j]);
-    // }
+    for (j = 0; j < sym_nb; j++)
+    {
+        printf("%d\n", j);
+        print_sym(symtab[j]);
+    }
     // ncmds = header->ncmds;
     // lc = (void *)ptr + sizeof(*header);
     // for (i = 0; i < ncmds; ++i)
@@ -160,9 +162,6 @@ void nm(char *ptr)
     if (magic_number == ELF_MAGIC) // #0xfeedfacf  7f 45 4c 46 46 4c 45 7f MH_MAGIC_64
         handle_64(ptr);
 }
-
-
-
 
 int main(int ac, char **av)
 {
