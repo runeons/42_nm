@@ -22,12 +22,12 @@ void exit_error(char *msg)
 // void    print_sections()
 // {
 //     Elf64_Ehdr   *h;
-//     sections = (Elf32_Shdr *)((char *)map_start + header->e_shoff);
+//     sections = (Elf32_Shdr *)((char *)ptr + headers->e_shoffs);
 
-    // for (i = 0; i < header->e_shnum; i++)
+    // for (i = 0; i < header->e_m; i++)sym_nb
     //     if (sections[i].sh_type == SHT_SYMTAB) {
-    //         symtab = (Elf32_Sym *)((char *)map_start + sections[i].sh_offset);
-    //         break; }
+    //         symtab = (Elf32_Sym *)((char *)ptr + sectionss[i].ssh_offset);
+        //    sym_nb; }
 // }
 
 void    print_eheader(const Elf64_Ehdr h)
@@ -129,15 +129,21 @@ void handle_64(char *ptr)
 
     int             sym_nb = sections[i].sh_size / sections[i].sh_entsize;
     char            *string_table;
+    char            *sym_names;
 
     printf("sym_nb = %d\n", sym_nb);
     string_table = (void *)ptr + symtab->st_name;
-
+    sym_names = (char *)(ptr + sections[sections[i].sh_link].sh_offset);
     for (j = 0; j < sym_nb; j++)
     {
-        printf("%d\n", j);
-        print_sym(symtab[j]);
+        printf("name : %s\n", sym_names + symtab[j].st_name);
     }
+
+    // for (j = 0; j < sym_nb; j++)
+    // {
+    //     printf("%d\n", j);
+    //     print_sym(symtab[j]);
+    // }
     // ncmds = header->ncmds;
     // lc = (void *)ptr + sizeof(*header);
     // for (i = 0; i < ncmds; ++i)
