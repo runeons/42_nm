@@ -19,17 +19,6 @@ void exit_error(char *msg)
 #define PFu_32      "u"
 #define PFu_64      "lu"
 
-// void    print_sections()
-// {
-//     Elf64_Ehdr   *h;
-//     sections = (Elf32_Shdr *)((char *)ptr + headers->e_shoffs);
-
-    // for (i = 0; i < header->e_m; i++)sym_nb
-    //     if (sections[i].sh_type == SHT_SYMTAB) {
-    //         symtab = (Elf32_Sym *)((char *)ptr + sectionss[i].ssh_offset);
-        //    sym_nb; }
-// }
-
 void    print_eheader(const Elf64_Ehdr h)
 {
     printf("\n");
@@ -50,7 +39,7 @@ void    print_eheader(const Elf64_Ehdr h)
     printf("e_shstrndx  : %"PFu_16"\n", h.e_shstrndx);
 }
 
-void    print_sheader(const Elf64_Shdr h)
+void    print_one_sheader(const Elf64_Shdr h)
 {
     printf("\n");
     printf("----------   \n");
@@ -67,7 +56,7 @@ void    print_sheader(const Elf64_Shdr h)
     printf("sh_entsize  : %"PFu_64"\n", h.sh_entsize);
 }
 
-void    print_sym(const Elf64_Sym h)
+void    print_one_sym(const Elf64_Sym h)
 {
     printf("\n");
     printf("----------   \n");
@@ -80,84 +69,59 @@ void    print_sym(const Elf64_Sym h)
     printf("st_size     : %"PFu_64"\n", h.st_size);
 }
 
-// void display_sym(struct symtab_command *sym, char *ptr)
-// {
-//     // printf("%d %d %d\n", sym->nsyms, sym->symoff, sym->stroff);
-//     int             i;
-//     char            *string_table;
-//     struct nlist_64 *array;
-    
-//     array = (void *)ptr + sym->symoff;
-//     string_table = (void *)ptr + sym->stroff;
-//     for (i = 0; i < sym->nsyms; i++)
-//     {
-//         printf("%s\n", string_table + array[i].n_un.n_strx);
-//     }
-// }
+// #define ELF64_ST_TYPE(info)          ((info) & 0xf)
+
+void display_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h, int j)
+{
+    char    *string_table;
+    char    *sym_names;
+
+    string_table = (void *)ptr + symtab->st_name;
+    sym_names    = (char *)(ptr + sections[symtab_section_h.sh_link].sh_offset);
+    printf("name : %s\n", sym_names + symtab[j].st_name);
+}
+
+void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
+{
+    int     j;
+    int     sym_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
+
+    printf("sym_nb = %d\n", sym_nb);
+    for (j = 0; j < sym_nb; j++)
+    {
+        display_one_sym(symtab, ptr, sections, symtab_section_h, j);
+        // printf("info : %s\n", ELF64_ST_TYPE((int)(sym_names + symtab[j].st_info)));
+    }
+}
 
 void handle_64(char *ptr)
 {
     printf("this is x64\n");
-    // int                     ncmds;
     Elf64_Ehdr   *header;
     Elf64_Shdr   *sections;
     Elf64_Sym    *symtab;
     int          i;
-    int          j;
-    // struct load_command     *lc;
-    // struct symtab_command   *sym;
 
-    header = (Elf64_Ehdr *)ptr;
-    if (header == NULL)
+    if ((header = (Elf64_Ehdr *)ptr) == NULL)
         exit_error("eheader");
-    print_eheader(*header);
-    sections = (Elf64_Shdr *)((char *)ptr + header->e_shoff);
-    if (sections == NULL)
+    // print_eheader(*header);
+    if ((sections = (Elf64_Shdr *)((char *)ptr + header->e_shoff)) == NULL)
         exit_error("sheader");
-    // print_sheader(*sections);
+    // print_one_sheader(*sections);
     for (i = 0; i < header->e_shnum; i++)
     {
         if (sections[i].sh_type == SHT_SYMTAB)
         {
-            symtab = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset);
+            symtab = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset); // debut de la symtab
+            print_one_sheader(sections[i]);
+            // print_one_sheader(sections[36]);
+            // print_one_sym(symtab[0]);
+            print_one_sym(symtab[3]);
+            display_symtab(symtab, ptr, sections, sections[i]);
+            display_one_sym(symtab, ptr, sections, sections[i], i);
             break;
         }
     }
-    printf("%d\n", i);
-    print_sheader(sections[i]);
-    print_sym(*symtab);
-
-    int             sym_nb = sections[i].sh_size / sections[i].sh_entsize;
-    char            *string_table;
-    char            *sym_names;
-
-    printf("sym_nb = %d\n", sym_nb);
-    string_table = (void *)ptr + symtab->st_name;
-    sym_names = (char *)(ptr + sections[sections[i].sh_link].sh_offset);
-    for (j = 0; j < sym_nb; j++)
-    {
-        printf("name : %s\n", sym_names + symtab[j].st_name);
-    }
-
-    // for (j = 0; j < sym_nb; j++)
-    // {
-    //     printf("%d\n", j);
-    //     print_sym(symtab[j]);
-    // }
-    // ncmds = header->ncmds;
-    // lc = (void *)ptr + sizeof(*header);
-    // for (i = 0; i < ncmds; ++i)
-    // {
-    //     if (lc->cmd == LC_SYMTAB)
-    //     {
-    //         printf("LC_SYMTAB\n");
-    //         sym = (struct symtab_command *) lc;
-    //         printf("nsyms: %d\n", sym->nsyms);
-    //         display_sym(sym, ptr);
-    //         break;
-    //     }
-    //     lc = (void *)lc + lc->cmdsize; // (void *) important pour controler
-    // }
 }
 
 void nm(char *ptr)
@@ -165,7 +129,7 @@ void nm(char *ptr)
     int magic_number;
 
     magic_number = *(int  *)ptr;
-    if (magic_number == ELF_MAGIC) // #0xfeedfacf  7f 45 4c 46 46 4c 45 7f MH_MAGIC_64
+    if (magic_number == ELF_MAGIC)
         handle_64(ptr);
 }
 
