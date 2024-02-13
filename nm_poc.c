@@ -5,7 +5,8 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
-#define ELF_MAGIC 0x464c457f
+#define ELF_MAGIC   0x464c457f
+#define PF_PADDING  16
 
 void exit_error(char *msg)
 {
@@ -71,14 +72,31 @@ void    print_one_sym(const Elf64_Sym h)
 
 // #define ELF64_ST_TYPE(info)          ((info) & 0xf)
 
+// char    *string_table;
+// string_table = (void *)ptr + symtab->st_name;
+
 void display_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h, int j)
 {
-    char    *string_table;
-    char    *sym_names;
-
-    string_table = (void *)ptr + symtab->st_name;
-    sym_names    = (char *)(ptr + sections[symtab_section_h.sh_link].sh_offset);
-    printf("name : %s\n", sym_names + symtab[j].st_name);
+    char            *strtab;
+    unsigned char   info;
+    unsigned char   type;
+    unsigned char   bind;
+    uint64_t        value; // Elf64_Addr
+    
+    strtab = (char *)(ptr + sections[symtab_section_h.sh_link].sh_offset);
+    value = (uint64_t)(symtab[j].st_value);
+    info = (unsigned char)(symtab[j].st_info);
+    type = ELF64_ST_TYPE((int)info);
+    bind = ELF64_ST_BIND((int)info);
+    // print_one_sym(symtab[j]);
+    // printf("name  : %s\n", strtab + symtab[j].st_name);
+    // printf("info  : %d\n", info);
+    // printf("type  : %d\n", type);
+    // printf("value : %"PFu_64"\n", value);
+    if (value == 0)
+        printf("%16c %d | %d %s\n", ' ', type, bind, strtab + symtab[j].st_name);
+    else
+        printf("%016"PFu_64" %d | %d %s\n", value, type, bind, strtab + symtab[j].st_name);
 }
 
 void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
@@ -86,11 +104,10 @@ void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const El
     int     j;
     int     sym_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
 
-    printf("sym_nb = %d\n", sym_nb);
+    // printf("sym_nb = %d\n", sym_nb);
     for (j = 0; j < sym_nb; j++)
     {
         display_one_sym(symtab, ptr, sections, symtab_section_h, j);
-        // printf("info : %s\n", ELF64_ST_TYPE((int)(sym_names + symtab[j].st_info)));
     }
 }
 
@@ -113,12 +130,12 @@ void handle_64(char *ptr)
         if (sections[i].sh_type == SHT_SYMTAB)
         {
             symtab = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset); // debut de la symtab
-            print_one_sheader(sections[i]);
+            // print_one_sheader(sections[i]);
             // print_one_sheader(sections[36]);
             // print_one_sym(symtab[0]);
-            print_one_sym(symtab[3]);
+            // print_one_sym(symtab[3]);
             display_symtab(symtab, ptr, sections, sections[i]);
-            display_one_sym(symtab, ptr, sections, sections[i], i);
+            // display_one_sym(symtab, ptr, sections, sections[i], i);
             break;
         }
     }
