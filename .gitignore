@@ -1,3 +1,8 @@
 a.out
 ft_nm
 ft_nm_nofsan
+objs/
+libft/libft.a
+libft/objs/
+.vscode/
+archives/

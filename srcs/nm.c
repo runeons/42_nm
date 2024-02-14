@@ -1,81 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <elf.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-
-#define ELF_MAGIC   0x464c457f
-#define PF_PADDING  16
-
-#define PFsizeof    "lu"
-#define PFu_c8      "hhu"
-#define PFu_16      "hu"
-#define PFu_32      "u"
-#define PFu_64      "lu"
-
-typedef struct  s_sym
-{
-    uint64_t        value;
-    char            letter;
-    char            *name;
-}               t_sym;
-
-void exit_error(char *msg)
-{
-    printf("%s\n", msg);
-    exit(1);
-}
-
-void    print_eheader(const Elf64_Ehdr h)
-{
-    printf("\n");
-    printf("----------   \n");
-    printf("Elf64_Ehdr  | %"PFsizeof"\n", sizeof(h));
-    printf("e_type      : %"PFu_16"\n", h.e_type);
-    printf("e_machine   : %"PFu_16"\n", h.e_machine);
-    printf("e_version   : %"PFu_32"\n", h.e_version);
-    printf("e_entry     : %"PFu_64"\n", h.e_entry);     // N-dependant
-    printf("e_phoff     : %"PFu_64"\n", h.e_phoff);     // N-dependant
-    printf("e_shoff     : %"PFu_64"\n", h.e_shoff);     // N-dependant
-    printf("e_flags     : %"PFu_32"\n", h.e_flags);
-    printf("e_ehsize    : %"PFu_16"\n", h.e_ehsize);
-    printf("e_phentsize : %"PFu_16"\n", h.e_phentsize);
-    printf("e_phnum     : %"PFu_16"\n", h.e_phnum);
-    printf("e_shentsize : %"PFu_16"\n", h.e_shentsize);
-    printf("e_shnum     : %"PFu_16"\n", h.e_shnum);
-    printf("e_shstrndx  : %"PFu_16"\n", h.e_shstrndx);
-}
-
-void    print_one_sheader(const Elf64_Shdr h)
-{
-    printf("\n");
-    printf("----------   \n");
-    printf("Elf64_Shdr  | %"PFsizeof"\n", sizeof(h));
-    printf("sh_name     : %"PFu_32"\n", h.sh_name);
-    printf("sh_type     : %"PFu_32"\n", h.sh_type);
-    printf("sh_flags    : %"PFu_64"\n", h.sh_flags);
-    printf("sh_addr     : %"PFu_64"\n", h.sh_addr);     // N-dependant
-    printf("sh_offset   : %"PFu_64"\n", h.sh_offset);   // N-dependant
-    printf("sh_size     : %"PFu_64"\n", h.sh_size);
-    printf("sh_link     : %"PFu_32"\n", h.sh_link);
-    printf("sh_info     : %"PFu_32"\n", h.sh_info);
-    printf("sh_addralign: %"PFu_64"\n", h.sh_addralign);
-    printf("sh_entsize  : %"PFu_64"\n", h.sh_entsize);
-}
-
-void    print_one_sym(const Elf64_Sym sym)
-{
-    printf("\n");
-    printf("----------   \n");
-    printf("Elf64_Sym   | %"PFsizeof"\n", sizeof(sym));
-    printf("st_name     : %"PFu_32"\n", sym.st_name);
-    printf("st_info     : %"PFu_c8"\n", sym.st_info);
-    printf("st_other    : %"PFu_c8"\n", sym.st_other);
-    printf("st_shndx    : %"PFu_16"\n", sym.st_shndx);
-    printf("st_value    : %"PFu_64"\n", sym.st_value);    // N-dependant
-    printf("st_size     : %"PFu_64"\n", sym.st_size);
-}
+#include <nm_functions.h>
 
 char capitalise(char letter, unsigned char bind)
 {
@@ -126,7 +49,7 @@ void display_one_raw_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, con
     bind = ELF64_ST_BIND((int)info);
     letter = calc_letter(symtab[j], type, bind);
     // if (letter == '=')
-        // print_one_sym(symtab[j]);
+        // debug_one_sym(symtab[j]);
     if (value == 0 && letter != 'a')
         printf("%16c %c %s (%d | %d)\n", ' ', letter, strtab + symtab[j].st_name, type, bind);
     else
@@ -149,7 +72,7 @@ void store_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf
     bind = ELF64_ST_BIND((int)info);
     letter = calc_letter(symtab[j], type, bind);
     // if (letter == '=')
-        // print_one_sym(symtab[j]);
+        // debug_one_sym(symtab[j]);
     if (value == 0 && letter != 'a')
         printf("%16c %c %s (%d | %d)\n", ' ', letter, strtab + symtab[j].st_name, type, bind);
     else
@@ -215,20 +138,17 @@ Elf64_Sym    *get_symtab(char *ptr, Elf64_Ehdr *header, Elf64_Shdr *sections, in
 
 void handle_64(char *ptr)
 {
-    printf("this is x64\n");
-    // Elf64_Sym    *symtab_init;
     Elf64_Ehdr  *header;
     Elf64_Shdr  *sections;
     Elf64_Sym   *symtab;
     int         symtab_index_in_sh;
-    int         i;
 
     if ((header = (Elf64_Ehdr *)ptr) == NULL)
         exit_error("eheader");
-    // print_eheader(*header);
+    // debug_eheader(*header);
     if ((sections = (Elf64_Shdr *)((char *)ptr + header->e_shoff)) == NULL)
         exit_error("sheader");
-    // print_one_sheader(*sections);
+    // debug_one_sheader(*sections);
     if ((symtab = get_symtab(ptr, header, sections, &symtab_index_in_sh)) == NULL)
         exit_error("symtab");
     display_raw_symtab(symtab, ptr, sections, sections[symtab_index_in_sh]);
@@ -250,8 +170,8 @@ int main(int ac, char **av)
     char *ptr;
     struct stat buf;
 
-    fd = open(av[1], O_RDONLY);
-    if (fd < 0)
+    (void)ac; // TO DO
+    if ((fd = open(av[1], O_RDONLY)) < 0)
         exit_error("open");
     if (fstat(fd, &buf) < 0)
         exit_error("fstat");
