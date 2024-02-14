@@ -8,6 +8,12 @@
 #define ELF_MAGIC   0x464c457f
 #define PF_PADDING  16
 
+void exit_error(char *msg)
+{
+    printf("%s\n", msg);
+    exit(1);
+}
+
 #define PFsizeof    "lu"
 #define PFu_c8      "hhu"
 #define PFu_16      "hu"
@@ -21,11 +27,6 @@ typedef struct  s_sym
     char            *name;
 }               t_sym;
 
-void exit_error(char *msg)
-{
-    printf("%s\n", msg);
-    exit(1);
-}
 
 void    print_eheader(const Elf64_Ehdr h)
 {
@@ -76,6 +77,12 @@ void    print_one_sym(const Elf64_Sym sym)
     printf("st_value    : %"PFu_64"\n", sym.st_value);    // N-dependant
     printf("st_size     : %"PFu_64"\n", sym.st_size);
 }
+
+// #define ELF64_ST_TYPE(info)          ((info) & 0xf)
+
+// char    *string_table;
+// string_table = (void *)ptr + symtab->st_name;
+
 
 char capitalise(char letter, unsigned char bind)
 {
@@ -145,18 +152,6 @@ void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const El
     }
 }
 
-void store_symbols(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
-{
-    int     j;
-    int     sym_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
-
-    // printf("sym_nb = %d\n", sym_nb);
-    for (j = 0; j < sym_nb; j++)
-    {
-        display_one_sym(symtab, ptr, sections, symtab_section_h, j);
-    }
-}
-
 void handle_64(char *ptr)
 {
     printf("this is x64\n");
@@ -180,7 +175,6 @@ void handle_64(char *ptr)
             // print_one_sheader(sections[36]);
             // print_one_sym(symtab[0]);
             // print_one_sym(symtab[3]);
-            store_symbols(symtab, ptr, sections, sections[i]);
             display_symtab(symtab, ptr, sections, sections[i]);
             // display_one_sym(symtab, ptr, sections, sections[i], i);
             break;
