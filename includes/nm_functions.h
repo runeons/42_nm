@@ -11,4 +11,8 @@
 # include <utils_colors.h>
 # include <nm_data.h>
 
+void    debug_eheader(const Elf64_Ehdr h);
+void    debug_one_sheader(const Elf64_Shdr h);
+void    debug_one_sym(const Elf64_Sym sym);
+
 #endif
