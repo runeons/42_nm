@@ -57,23 +57,57 @@ void    print_one_sheader(const Elf64_Shdr h)
     printf("sh_entsize  : %"PFu_64"\n", h.sh_entsize);
 }
 
-void    print_one_sym(const Elf64_Sym h)
+void    print_one_sym(const Elf64_Sym sym)
 {
     printf("\n");
     printf("----------   \n");
-    printf("Elf64_Sym   | %"PFsizeof"\n", sizeof(h));
-    printf("st_name     : %"PFu_32"\n", h.st_name);
-    printf("st_info     : %"PFu_c8"\n", h.st_info);
-    printf("st_other    : %"PFu_c8"\n", h.st_other);
-    printf("st_shndx    : %"PFu_16"\n", h.st_shndx);
-    printf("st_value    : %"PFu_64"\n", h.st_value);    // N-dependant
-    printf("st_size     : %"PFu_64"\n", h.st_size);
+    printf("Elf64_Sym   | %"PFsizeof"\n", sizeof(sym));
+    printf("st_name     : %"PFu_32"\n", sym.st_name);
+    printf("st_info     : %"PFu_c8"\n", sym.st_info);
+    printf("st_other    : %"PFu_c8"\n", sym.st_other);
+    printf("st_shndx    : %"PFu_16"\n", sym.st_shndx);
+    printf("st_value    : %"PFu_64"\n", sym.st_value);    // N-dependant
+    printf("st_size     : %"PFu_64"\n", sym.st_size);
 }
 
 // #define ELF64_ST_TYPE(info)          ((info) & 0xf)
 
 // char    *string_table;
 // string_table = (void *)ptr + symtab->st_name;
+
+
+char capitalise(char letter, unsigned char bind)
+{
+    if (bind == STB_LOCAL)
+        return (letter);
+    else if (bind == STB_GLOBAL)
+        return (letter - 32);
+    return '?';
+}
+
+char calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
+{
+    if (sym.st_value == 0)
+        if (bind == STB_WEAK) 
+            return 'w';
+        else if (type == STT_FILE)
+            return 'a';
+        else
+            return 'U';
+    else if (bind == STB_WEAK)
+        return 'W';
+    else if (type == STT_FUNC)
+        return capitalise('t', bind);
+
+    if (type == STT_OBJECT)
+        return 'Z';
+    if (type == STT_COMMON)
+        return 'C';
+    if (type == STT_SECTION)
+        return 'Y';
+
+    return '=';
+}
 
 void display_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h, int j)
 {
@@ -82,21 +116,20 @@ void display_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const E
     unsigned char   type;
     unsigned char   bind;
     uint64_t        value; // Elf64_Addr
+    char            letter;
     
     strtab = (char *)(ptr + sections[symtab_section_h.sh_link].sh_offset);
     value = (uint64_t)(symtab[j].st_value);
     info = (unsigned char)(symtab[j].st_info);
     type = ELF64_ST_TYPE((int)info);
     bind = ELF64_ST_BIND((int)info);
-    // print_one_sym(symtab[j]);
-    // printf("name  : %s\n", strtab + symtab[j].st_name);
-    // printf("info  : %d\n", info);
-    // printf("type  : %d\n", type);
-    // printf("value : %"PFu_64"\n", value);
-    if (value == 0)
-        printf("%16c %d | %d %s\n", ' ', type, bind, strtab + symtab[j].st_name);
+    letter = calc_letter(symtab[j], type, bind);
+    // if (letter == '=')
+        // print_one_sym(symtab[j]);
+    if (value == 0 && letter != 'a')
+        printf("%16c %c %s (%d | %d)\n", ' ', letter, strtab + symtab[j].st_name, type, bind);
     else
-        printf("%016"PFu_64" %d | %d %s\n", value, type, bind, strtab + symtab[j].st_name);
+        printf("%016"PFu_64" %c %s (%d | %d)\n", value, letter, strtab + symtab[j].st_name, type, bind);
 }
 
 void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
