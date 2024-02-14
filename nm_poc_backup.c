@@ -110,7 +110,7 @@ char calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
     return '=';
 }
 
-void display_one_raw_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h, int j)
+void display_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h, int j)
 {
     char            *strtab;
     unsigned char   info;
@@ -156,7 +156,7 @@ void store_one_sym(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf
         printf("%016"PFu_64" %c %s (%d | %d)\n", value, letter, strtab + symtab[j].st_name, type, bind);
 }
 
-void display_raw_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
+void display_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf64_Shdr symtab_section_h)
 {
     int     j;
     int     sym_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
@@ -164,7 +164,7 @@ void display_raw_symtab(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, cons
     // printf("sym_nb = %d\n", sym_nb);
     for (j = 0; j < sym_nb; j++)
     {
-        display_one_raw_sym(symtab, ptr, sections, symtab_section_h, j);
+        display_one_sym(symtab, ptr, sections, symtab_section_h, j);
     }
 }
 
@@ -180,48 +180,37 @@ void store_symbols(Elf64_Sym *symtab, char *ptr, Elf64_Shdr *sections, const Elf
     }
 }
 
-Elf64_Sym    *get_symtab(char *ptr, Elf64_Ehdr *header, Elf64_Shdr *sections, int *symtab_index_in_sh)
+Elf64_Sym    *get_symtab(char *ptr, Elf64_Ehdr *header, Elf64_Shdr *sections)
 {
     int         i;
-    Elf64_Sym   *symtab;
+    Elf64_Sym   *symtab2;
     
-    printf("get_symtab\n");
     for (i = 0; i < header->e_shnum; i++)
     {
         if (sections[i].sh_type == SHT_SYMTAB)
         {
-            symtab = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset); // debut de la symtab
-            *symtab_index_in_sh = i;
-            return (symtab);
+            symtab2 = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset); // debut de la symtab
+            print_one_sheader(sections[i]);
+            // print_one_sheader(sections[36]);
+            // print_one_sym(symtab[0]);
+            // print_one_sym(symtab[3]);
+            // store_symbols(symtab, ptr, sections, sections[i]);
+            // display_symtab(symtab, ptr, sections, sections[i]);
+            // display_one_sym(symtab, ptr, sections, sections[i], i);
+            break;
         }
     }
-    return (NULL);
+    return (symtab2);
 }
-
-// void read_and_store_syms()
-// {
-//     // allocate 1 tab/linked list of syms
-//     // for each sym in symnb
-//     //   create new t_sym and add it to the list
-//     int     j;
-//     int     sym_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
-
-//     // printf("sym_nb = %d\n", sym_nb);
-//     for (j = 0; j < sym_nb; j++)
-//     {
-//         // handle_and_store_one_sym(symtab, ptr, sections, symtab_section_h, j);
-//     }
-// }
 
 void handle_64(char *ptr)
 {
     printf("this is x64\n");
-    // Elf64_Sym    *symtab_init;
-    Elf64_Ehdr  *header;
-    Elf64_Shdr  *sections;
-    Elf64_Sym   *symtab;
-    int         symtab_index_in_sh;
-    int         i;
+    Elf64_Ehdr   *header;
+    Elf64_Shdr   *sections;
+    Elf64_Sym    *symtab;
+    Elf64_Sym    *symtab2;
+    int          i;
 
     if ((header = (Elf64_Ehdr *)ptr) == NULL)
         exit_error("eheader");
@@ -229,11 +218,33 @@ void handle_64(char *ptr)
     if ((sections = (Elf64_Shdr *)((char *)ptr + header->e_shoff)) == NULL)
         exit_error("sheader");
     // print_one_sheader(*sections);
-    if ((symtab = get_symtab(ptr, header, sections, &symtab_index_in_sh)) == NULL)
-        exit_error("symtab");
-    display_raw_symtab(symtab, ptr, sections, sections[symtab_index_in_sh]);
-    // read_and_store_syms(symtab, ptr, sections, sections[symtab_index_in_sh]);
+    for (i = 0; i < header->e_shnum; i++)
+    {
+        if (sections[i].sh_type == SHT_SYMTAB)
+        {
+            symtab = (Elf64_Sym *)((char *)ptr + sections[i].sh_offset); // debut de la symtab
+            print_one_sheader(sections[i]);
+            // print_one_sheader(sections[36]);
+            // print_one_sym(symtab[0]);
+            // print_one_sym(symtab[3]);
+            // store_symbols(symtab, ptr, sections, sections[i]);
+            // display_symtab(symtab, ptr, sections, sections[i]);
+            // display_one_sym(symtab, ptr, sections, sections[i], i);
+            break;
+        }
+    }
+    symtab2 = get_symtab(ptr, header, sections);
+    print_one_sym(symtab2[4]);
+    print_one_sym(symtab[4]);
+    display_symtab(symtab, ptr, sections, sections[i]);
 }
+
+            // print_one_sheader(sections[36]);
+            // print_one_sym(symtab[0]);
+            // print_one_sym(symtab[3]);
+            // store_symbols(symtab, ptr, sections, sections[i]);
+            // display_symtab(symtab, ptr, sections, sections[i]);
+            // display_one_sym(symtab, ptr, sections, sections[i], i);
 
 void nm(char *ptr)
 {
