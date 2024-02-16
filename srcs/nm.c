@@ -123,7 +123,7 @@ void read_and_store_syms(t_data *dt)
 void handle_64(t_data *dt)
 {
     // t_lst       *syms;
-    // int         symtab_index_in_sh;
+    // int         symtab_index_in_sh;-
     if ((dt->header = (Elf64_Ehdr *)dt->ptr) == NULL)
         exit_error("eheader");
     // debug_eheader(*dt->header);
