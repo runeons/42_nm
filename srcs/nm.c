@@ -30,12 +30,12 @@ void read_and_store_syms(t_data *dt)
         fill_sym(dt, i);
         // t_lst *sym_node = ft_lst_get_node_at_index(&dt->syms, i);
         // t_sym *current_sym = (t_sym *)sym_node->content;
-    //     if (current_sym->letter == 'Z')
-    //     // if (current_sym->raw->st_shndx == 26)
-    //     {
-    //         printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
-    //         debug_one_sym(*current_sym->raw);
-    //     }
+        // if (current_sym->letter == '=')
+        // // if (current_sym->raw->st_shndx == 21)
+        // {
+        //     printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
+        //     debug_one_sym(*current_sym->raw);
+        // }
     }
     sort_list(&dt->syms);
     display_sym_list(dt->syms);

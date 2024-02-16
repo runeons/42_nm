@@ -79,8 +79,10 @@ leak:  $(OBJS) $(SRCS)
 
 tester:
 	@ make -C libft/
-	@ rm -f $(NAME_TESTER)
 	@ $(CC) $(CFLAGS) srcs/simple_tester.c $(HDIR) $(INC_LIB) $(LIB) -o $(NAME_TESTER)
+
+tclean:
+	@ rm -rf $(NAME_TESTER)
 
 clean:
 	@ make clean -C libft/
@@ -93,6 +95,8 @@ fclean:
 
 re: fclean all
 
+test: tclean tester
+
 fsanr: fclean fsan
 
-.PHONY: all clean fclean re bonus fsan fsanre
+.PHONY: all clean fclean re bonus fsan fsanre tester test tclean

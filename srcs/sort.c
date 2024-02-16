@@ -11,6 +11,22 @@ void lower_if_needed(char **name)
     }
 }
 
+// int	ft_special_strcmp(char *s1, char *s2)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (s1[i] && s2[i])
+// 	{
+// 		if (s1[i] == s2[i])
+// 			i++;
+// 		else
+// 			return (s1[i] - s2[i]);
+// 	}
+// 	return (s1[i] - s2[i]);
+// }
+
+
 int compare_sym(const void *a, const void *b)
 {
     int res;
@@ -31,6 +47,20 @@ int compare_sym(const void *a, const void *b)
     return res;
 }
 
+int compare_letters(const void *a, const void *b)
+{
+    int res;
+
+    t_sym *sym_a = *(t_sym **)a;
+    t_sym *sym_b = *(t_sym **)b;
+
+    char letter_a = sym_a->letter;
+    char letter_b = sym_b->letter;
+
+    res = letter_a - letter_b;
+    return res;
+}
+
 void sort_list(t_lst **syms)
 {
     int     sym_count = ft_lst_size(*syms);
@@ -45,6 +75,7 @@ void sort_list(t_lst **syms)
             sym_array[i] = (t_sym *)current->content;
             current = current->next;
         }
+        qsort(sym_array, sym_count, sizeof(t_sym *), compare_letters);
         qsort(sym_array, sym_count, sizeof(t_sym *), compare_sym);
         current = *syms;
         for (int i = 0; i < sym_count; i++)

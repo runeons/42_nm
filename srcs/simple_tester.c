@@ -43,7 +43,7 @@ int    compare(char *mine, char *syst, int len)
 {
     int i = 0;
 
-    for (i = 0; i < len; i++)
+    for (i = 0; i < len; i++) // TO DO TMP
     {
         if (mine[i] != syst[i])
             return (i);
@@ -75,6 +75,7 @@ int main(int ac, char **av)
     if (mine_len != syst_len)
         printf("mine_len != syst_len (%d != %d)\n", mine_len, syst_len);
     cmp = compare(mine, syst, mine_len);
+    printf(C_G_RED"[QUICK DEBUG] cmp: %d"C_RES"\n", cmp);
     if (cmp != -1)
     {
         printf(C_G_GREEN"[SYST]: %.32s"C_RES"\n", &syst[cmp]);
