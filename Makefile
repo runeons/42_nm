@@ -14,9 +14,10 @@ CFLAGS					= 	-I includes/ \
 							-I libft/includes/ \
 							-Wall -Wextra -Werror 
 
-INC_LIB						= 	-I libft
-LIB							= 	-L libft -lft
+INC_LIB					= 	-I libft
+LIB						= 	-L libft -lft
 
+NAME_TESTER				=	tester
 
 
 # *** PROJECT HEADER ********************************************************* #
@@ -53,6 +54,8 @@ OBJS_LIST				=	$(patsubst %.c, %.o, $(SRCS_LIST))
 
 OBJS					=	$(addprefix $(OBJS_DIR), $(OBJS_LIST))
 
+# *** TESTER ******************************************************************* #
+# gcc -Wall -Wextra -Werror srcs/simple_tester.c -I ./libft/includes -I ./includes -L ./libft/ -lft -o tester && ./tester
 
 
 all: $(OBJS) $(SRCS) $(NAME)
@@ -72,6 +75,10 @@ fsan:  $(OBJS) $(SRCS)
 leak:  $(OBJS) $(SRCS)
 	@ make -C libft/
 	@ $(CC) $(CFLAGS) $(LFLAGS) $(HDIR) $(OBJS) $(INC_LIB) $(LIB) -o $(NAME)
+
+tester:
+	@ make -C libft/
+	@ $(CC) $(CFLAGS) srcs/simple_tester.c $(HDIR) $(INC_LIB) $(LIB) -o $(NAME_TESTER)
 
 clean:
 	@ make clean -C libft/
