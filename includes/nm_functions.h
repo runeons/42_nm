@@ -27,5 +27,9 @@ void    fill_sym(t_data *dt, int index);
 void    display_one_sym(t_sym *sym);
 void    display_sym_list(t_lst *syms);
 
+// sort
+void    lower_if_needed(char **name);
+int     compare_sym(const void *a, const void *b);
+void    sort_list(t_lst **syms);
 
 #endif

@@ -1,4 +1,4 @@
-// gcc -Wall -Wextra -Werror srcs/simple_tester.c -I ./libft/includes -I ./includes -L ./libft/ -lft -o tester && ./tester
+// gcc -Wall -Wextra -Werror -fsanitize=address -g3 srcs/simple_tester.c -I ./libft/includes -I ./includes -L ./libft/ -lft -o tester && ./tester
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -8,6 +8,8 @@
 #include <utils_colors.h>
 
 # define MAX_LEN 5000 // TO DO
+
+// TO DO check line format
 
 void clean(char *file, char *res ,int *size)
 {
@@ -64,10 +66,10 @@ int main(int ac, char **av)
         exit_error("Allocation failure");
     if ((syst = malloc(MAX_LEN)) == NULL)
         exit_error("Allocation failure");
-    system("./ft_nm ft_nm > tmp_mine");
+    system("./ft_nm a.out > tmp_mine");
     clean("./tmp_mine", mine, &mine_len);
     // system("rm tmp_mine");
-    system("nm -a ft_nm > tmp_syst");
+    system("nm -a a.out > tmp_syst");
     clean("./tmp_syst", syst, &syst_len);
     // system("rm tmp_syst");
     if (mine_len != syst_len)

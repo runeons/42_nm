@@ -13,7 +13,7 @@
 
 typedef struct  s_sym
 {
-    Elf64_Sym       *curr_sym;
+    Elf64_Sym       *raw;
     uint64_t        value;
     char            letter;
     char            *name;

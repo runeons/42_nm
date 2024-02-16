@@ -5,9 +5,9 @@ void    display_one_sym(t_sym *sym)
     if (DEBUG)
     {
         if (sym->value == 0 && sym->letter != 'a')
-            printf("%16c %c %s (%d | %d) %d\n", ' ', sym->letter, sym->name, sym->type, sym->bind, sym->curr_sym->st_shndx);
+            printf("%16c %c %s (%d | %d) %d\n", ' ', sym->letter, sym->name, sym->type, sym->bind, sym->raw->st_shndx);
         else
-            printf("%016"PFu_64" %c %s (%d | %d) %d\n", sym->value, sym->letter, sym->name, sym->type, sym->bind, sym->curr_sym->st_shndx);
+            printf("%016"PFu_64" %c %s (%d | %d) %d\n", sym->value, sym->letter, sym->name, sym->type, sym->bind, sym->raw->st_shndx);
     }
     else
     {
@@ -15,7 +15,7 @@ void    display_one_sym(t_sym *sym)
             printf("%16c %c %s\n", ' ', sym->letter, sym->name);
         else
             printf("%016"PFu_64" %c %s\n", sym->value, sym->letter, sym->name);
-        // debug_one_sym(*(sym->curr_sym));
+        // debug_one_sym(*(sym->raw));
     }
 
 }

@@ -42,6 +42,7 @@ SRCS_LIST					=	\
 							nm.c \
 							debug.c \
 							display.c \
+							sort.c \
 							symbols.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
@@ -78,6 +79,7 @@ leak:  $(OBJS) $(SRCS)
 
 tester:
 	@ make -C libft/
+	@ rm -f $(NAME_TESTER)
 	@ $(CC) $(CFLAGS) srcs/simple_tester.c $(HDIR) $(INC_LIB) $(LIB) -o $(NAME_TESTER)
 
 clean:

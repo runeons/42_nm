@@ -23,6 +23,17 @@ char calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
     else if (type == STT_FUNC)
         return capitalise('t', bind);
 
+    if (sym.st_shndx == 26)
+        return capitalise('b', bind);
+    if (sym.st_shndx == 25)
+        return capitalise('d', bind);
+    if (sym.st_shndx == 19)
+        // return capitalise('r', bind);
+    // if (ft_strcmp(sym.name, "data_start") == 0) // TO DO
+    //     return 'W';
+    // if (ft_strcmp(sym.name, "__data_start") == 0) // TO DO
+    //     return 'D';
+
     if (type == STT_OBJECT)
         return 'Z';
     if (type == STT_COMMON)
@@ -39,7 +50,7 @@ void init_sym(t_data *dt, int index)
 
     if ((new_sym = mmalloc(sizeof(t_sym))) == NULL)
         exit_error("init_sym\n");
-    new_sym->curr_sym   = &dt->symtab[index];
+    new_sym->raw   = &dt->symtab[index];
     new_sym->value      = 0;
     new_sym->letter     = '\0';
     new_sym->name       = NULL;
