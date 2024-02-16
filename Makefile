@@ -40,7 +40,8 @@ SRCS_DIR					=	./srcs/
 SRCS_LIST					=	\
 							nm.c \
 							debug.c \
-							# display.c \
+							display.c \
+							symbols.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
 

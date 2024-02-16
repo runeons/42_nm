@@ -1,8 +1,10 @@
 a.out
 ft_nm
-ft_nm_nofsan
+tester
+tmp_mine
+tmp_syst
 objs/
+archives/
 libft/libft.a
 libft/objs/
 .vscode/
-archives/
