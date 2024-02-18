@@ -10,42 +10,44 @@
 # define MAX_LEN 4096 // TO DO
 # define NM_LETTERS "wWaUtTdDrRbB" // cf. symbols
 
-int    is_nm_letter(char c)
-{
-    for (int i = 0; i < (int)ft_strlen(NM_LETTERS); i++)
-    {
-        if (c == NM_LETTERS[i])
-            return (1);
-    }
-    return (0);
-}
+// TO DO check_line_format
 
-void    exit_parsing(char *line)
-{
-    printf(C_G_RED"Error:"C_G_WHITE"%s\n"C_RES, line);
-}
+// int    is_nm_letter(char c)
+// {
+//     for (int i = 0; i < (int)ft_strlen(NM_LETTERS); i++)
+//     {
+//         if (c == NM_LETTERS[i])
+//             return (1);
+//     }
+//     return (0);
+// }
 
-void    check_line_format(char *line)
-{
-    const char *ptr = line;
+// void    exit_parsing(char *line)
+// {
+//     printf(C_G_RED"Error:"C_G_WHITE"%s\n"C_RES, line);
+// }
 
-    if (ft_strlen(line) <= 20)
-        exit_err("Error: file is not an nm output.\n");
-    for (int i = 0; i < 16; i++)
-    {
-        if (!ft_isdigit(*ptr) && (*ptr) != ' ')
-            exit_err("Error: file is not an nm output.\n");
-        ptr++;
-    }
-    if (*ptr++ != ' ')
-        exit_err("Error: file is not an nm output.\n");
-    if (is_nm_letter(*ptr++))
-        exit_err("Error: file is not an nm output.\n");
-    if (*ptr++ != ' ')
-        exit_err("Error: file is not an nm output.\n");
-    if (!ft_isalpha(*ptr++))
-        exit_err("Error: file is not an nm output.\n");
-}
+// void    check_line_format(char *line)
+// {
+//     const char *ptr = line;
+
+//     if (ft_strlen(line) <= 20)
+//         exit_err("Error: file is not an nm output.\n");
+//     for (int i = 0; i < 16; i++)
+//     {
+//         if (!ft_isdigit(*ptr) && (*ptr) != ' ')
+//             exit_err("Error: file is not an nm output.\n");
+//         ptr++;
+//     }
+//     if (*ptr++ != ' ')
+//         exit_err("Error: file is not an nm output.\n");
+//     if (is_nm_letter(*ptr++))
+//         exit_err("Error: file is not an nm output.\n");
+//     if (*ptr++ != ' ')
+//         exit_err("Error: file is not an nm output.\n");
+//     if (!ft_isalpha(*ptr++))
+//         exit_err("Error: file is not an nm output.\n");
+// }
 
 void clean(char *file, char *res ,int *size)
 {
@@ -61,7 +63,7 @@ void clean(char *file, char *res ,int *size)
     ft_memset(res, '\0', buf.st_size);
     while (get_next_line(fd, &line) > 0)
     {
-        check_line_format(line);
+        // check_line_format(line);
         int n = ft_strlen(line) - 16;
         strncpy(&res[i], line + 17, n);
         res[i + n - 1] = '\n';
