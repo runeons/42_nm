@@ -1,5 +1,6 @@
 #include <nm_functions.h>
 
+
 void lower_if_needed(char **name)
 {
     size_t len = ft_strlen(*name);
@@ -11,21 +12,32 @@ void lower_if_needed(char **name)
     }
 }
 
-// int	ft_special_strcmp(char *s1, char *s2)
-// {
-// 	int	i;
+int    is_special_char(char c)
+{
+    if (c >= 33 && c <= 126)
+    {
+        if (ft_isalnum(c))
+		    return (0);
+    }
+	return (1);
+}
 
-// 	i = 0;
-// 	while (s1[i] && s2[i])
-// 	{
-// 		if (s1[i] == s2[i])
-// 			i++;
-// 		else
-// 			return (s1[i] - s2[i]);
-// 	}
-// 	return (s1[i] - s2[i]);
-// }
+void    remove_special_chars(char **name)
+{
+    char *current = *name;
+    char *result  = *name;
 
+    while (*current != '\0')
+    {
+        if (is_special_char(*current) == 0)
+        {
+            *result = *current;
+            result++;
+        }
+        current++;
+    }
+    *result = '\0';
+}
 
 int compare_sym(const void *a, const void *b)
 {
@@ -37,10 +49,8 @@ int compare_sym(const void *a, const void *b)
     char *name_a = ft_strdup(sym_a->name);
     char *name_b = ft_strdup(sym_b->name);
 
-    while (*name_a == '_')
-        name_a++;
-    while (*name_b == '_')
-        name_b++;
+    remove_special_chars(&name_a);
+    remove_special_chars(&name_b);
     lower_if_needed(&name_a);
     lower_if_needed(&name_b);
     res = ft_strcmp(name_a, name_b);
