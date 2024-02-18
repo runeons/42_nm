@@ -11,6 +11,7 @@
 # include <utils_colors.h>
 # include <nm_data.h>
 
+void    exit_error(const char *msg);
 
 // debug
 void    debug_eheader(const Elf64_Ehdr h);

@@ -1,6 +1,5 @@
 #include <nm_functions.h>
 
-
 void lower_if_needed(char **name)
 {
     size_t len = ft_strlen(*name);

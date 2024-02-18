@@ -1,5 +1,12 @@
 #include <nm_functions.h>
 
+void exit_error(const char *msg)
+{
+    printf(C_G_RED"Error:"C_G_WHITE" %s\n"C_RES, msg);
+    free_all_malloc();
+    exit(1);
+}
+
 Elf64_Sym    *get_symtab(t_data *dt)
 {
     int         i;
@@ -30,8 +37,8 @@ void read_and_store_syms(t_data *dt)
         fill_sym(dt, i);
         // t_lst *sym_node = ft_lst_get_node_at_index(&dt->syms, i);
         // t_sym *current_sym = (t_sym *)sym_node->content;
-        // if (current_sym->letter == '=')
-        // // if (current_sym->raw->st_shndx == 21)
+        // // if (current_sym->letter == 'r')
+        // if (current_sym->raw->st_shndx == 20)
         // {
         //     printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
         //     debug_one_sym(*current_sym->raw);

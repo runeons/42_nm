@@ -23,9 +23,9 @@ char calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
     else if (type == STT_FUNC)
         return capitalise('t', bind);
 
-    if (sym.st_shndx >= 21 && sym.st_shndx <= 25)
+    if (sym.st_shndx >= 20 && sym.st_shndx <= 25) // 10 may be OS dependent
         return capitalise('d', bind);
-    if (sym.st_shndx >= 18 && sym.st_shndx <= 20)
+    if (sym.st_shndx >= 17 && sym.st_shndx <= 20)
         return capitalise('r', bind);
     if (sym.st_shndx == 26)
         return capitalise('b', bind);

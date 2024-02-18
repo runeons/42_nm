@@ -116,8 +116,8 @@ STR_FCT							= \
 							str_fct/ft_toupper.c \
 
 ERROR_FCT						= \
-							error_fct/exit_error.c \
-							error_fct/exit_error_close.c \
+							error_fct/exit_err.c \
+							error_fct/exit_err_close.c \
 							error_fct/warning_error.c \
 
 SRCS_LIST				=	\
