@@ -9,7 +9,7 @@ void exit_error(const char *msg)
 
 void exit_corrupted(const char *msg)
 {
-    printf(C_G_BLUE"Error: "C_RES"nm: %s: %s\n", msg, strerror(errno));
+    printf(C_G_BLUE"Error: "C_RES"nm: %s\n", msg);
     free_all_malloc();
     exit(1);
 }
@@ -34,43 +34,58 @@ void exit_error_close(const char *msg, int fd)
 
 // }
 
+void    check_sheader_format(Elf64_Shdr sh)
+{
+    if (sh.sh_type > 5 || sh.sh_addralign % 8 != 0) // could check sh.sh_size
+        exit_corrupted("corruption in sheaders");
+}
+
 int    find_nb_symbols(t_data *dt)
 {
     int         syms_nb;
     Elf64_Shdr  symtab_section_h;
     
     syms_nb = 0;
+    if (dt->sections_hdrs == NULL || dt->symtab_index > (int)sizeof(*dt->sections_hdrs))
+        exit_corrupted("corruption in sections_hdrs");
     symtab_section_h = (Elf64_Shdr)dt->sections_hdrs[dt->symtab_index];
     // debug_one_sheader(symtab_section_h);
+    if (symtab_section_h.sh_entsize == 0)
+        exit_corrupted("zero-division forbidden");
     syms_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
-
     return (syms_nb);
 }
 
-
-void read_and_store_syms(t_data *dt)
+void    debug_to_fix(t_data *dt, int i)
 {
-    int i;
+    if (dt)
+    {
+        t_lst *sym_node = ft_lst_get_node_at_index(&dt->syms, i);
+        if (sym_node)
+        {
+            t_sym *current_sym = (t_sym *)sym_node->content;
+            // if (current_sym->letter == 'r')
+            if (current_sym->raw->st_shndx == 20)
+            {
+                printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
+                debug_one_sym(*current_sym->raw);
+            }
+        }
+    }
+}
+
+void    read_and_store_syms(t_data *dt)
+{
     int syms_nb;
 
-    syms_nb = find_nb_symbols(dt);
-
-    // printf(C_G_RED"[QUICK DEBUG] syms_nb: %d"C_RES"\n", syms_nb);
-    for (i = 0; i < syms_nb; i++)
+    if ((syms_nb = find_nb_symbols(dt)) == 0)
+        exit_msg("zero-division forbidden");
+    for (int i = 0; i < syms_nb; i++)
     {
         init_sym(dt, i);
         fill_sym(dt, i);
-        // t_lst *sym_node = ft_lst_get_node_at_index(&dt->syms, i);
-        // t_sym *current_sym = (t_sym *)sym_node->content;
-        // // if (current_sym->letter == 'r')
-        // if (current_sym->raw->st_shndx == 20)
-        // {
-        //     printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
-        //     debug_one_sym(*current_sym->raw);
-        // }
+        // debug_to_fix(dt, i);
     }
-    sort_list(&dt->syms);
-    display_sym_list(dt->syms);
 }
 
 void     check_offset_boundaries(t_data *dt, uint64_t offset)
@@ -88,9 +103,8 @@ Elf64_Sym    *find_symtab(t_data *dt)
         {
             if (dt->sections_hdrs[i].sh_type == SHT_SYMTAB)
             {
+                check_sheader_format(dt->sections_hdrs[i]);
                 check_offset_boundaries(dt, dt->sections_hdrs[i].sh_offset);
-                // printf(C_G_RED"[QUICK DEBUG] dt->sections_hdrs[i]: %ld"C_RES"\n", dt->sections_hdrs[i]);
-                // printf(C_G_RED"[QUICK DEBUG] dt->sections_hdrs[i].sh_offset: %ld"C_RES"\n", dt->sections_hdrs[i].sh_offset);
                 if ((symtab = (Elf64_Sym *)((char *)dt->ptr + dt->sections_hdrs[i].sh_offset)) == NULL)
                     exit_error("symtab");
                 dt->symtab_index = i;
@@ -122,6 +136,8 @@ void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so
     {
         init_elf_ptrs(dt);
         read_and_store_syms(dt);
+        sort_syms(&dt->syms);
+        display_syms(dt->syms);
     }
     else
         exit_msg("file format not recognized");

@@ -70,7 +70,7 @@ int compare_letters(const void *a, const void *b)
     return res;
 }
 
-void sort_list(t_lst **syms)
+void sort_syms(t_lst **syms)
 {
     int     sym_count = ft_lst_size(*syms);
     if (sym_count > 1)

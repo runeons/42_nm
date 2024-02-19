@@ -3,6 +3,7 @@ ft_nm
 tester
 tmp_mine
 tmp_syst
+bin/
 objs/
 archives/
 libft/libft.a

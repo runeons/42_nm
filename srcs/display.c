@@ -20,7 +20,7 @@ void    display_one_sym(t_sym *sym)
 
 }
 
-void    display_sym_list(t_lst *syms)
+void    display_syms(t_lst *syms)
 {
     t_lst *current = syms;
 

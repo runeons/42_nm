@@ -29,7 +29,6 @@ typedef struct  s_data
     Elf64_Shdr  *sections_hdrs;      // pointeur vers debut sections
     int         symtab_index;        // index de symtab in sections_hdrs
     Elf64_Sym   *symtab;             // pointeur vers debut symtab
-    // Elf64_Shdr  *symtab_section_h;
     t_lst       *syms;
 }					t_data;
 
