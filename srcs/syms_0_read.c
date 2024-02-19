@@ -85,3 +85,39 @@ void fill_sym(t_data *dt, int index)
         ft_strcpy(sym->name, strtab + symtab[index].st_name); // TO DO protect
     }
 }
+
+// void    store_symbols(t_data *dt)
+// {
+
+// }
+
+int    find_nb_symbols(t_data *dt)
+{
+    int         syms_nb;
+    Elf64_Shdr  symtab_section_h;
+    
+    syms_nb = 0;
+    if (dt->sections_hdrs == NULL || dt->symtab_index > (int)sizeof(*dt->sections_hdrs))
+        exit_corrupted("corruption in sections_hdrs");
+    symtab_section_h = (Elf64_Shdr)dt->sections_hdrs[dt->symtab_index];
+    // debug_one_sheader(symtab_section_h);
+    if (symtab_section_h.sh_entsize == 0)
+        exit_corrupted("zero-division forbidden");
+    syms_nb = symtab_section_h.sh_size / symtab_section_h.sh_entsize;
+    return (syms_nb);
+}
+
+void    read_and_store_syms(t_data *dt)
+{
+    int syms_nb;
+
+    if ((syms_nb = find_nb_symbols(dt)) == 0)
+        exit_msg("No symbols");
+    for (int i = 0; i < syms_nb; i++)
+    {
+        init_sym(dt, i);
+        fill_sym(dt, i);
+        // debug_to_fix(dt, i);
+    }
+}
+

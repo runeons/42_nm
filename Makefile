@@ -39,11 +39,13 @@ HEADER					=	\
 SRCS_DIR					=	./srcs/
 
 SRCS_LIST					=	\
-							nm.c \
+							check.c \
 							debug.c \
-							display.c \
-							sort.c \
-							symbols.c \
+							exit.c \
+							nm.c \
+							syms_0_read.c \
+							syms_1_sort.c \
+							syms_2_display.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
 
