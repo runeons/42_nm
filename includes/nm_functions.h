@@ -10,6 +10,7 @@
 # include <libft.h>
 # include <utils_colors.h>
 # include <nm_data.h>
+# include <errno.h>
 
 void    exit_error(const char *msg);
 

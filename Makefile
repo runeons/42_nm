@@ -97,6 +97,6 @@ re: fclean all
 
 test: tclean tester
 
-fsanr: fclean fsan
+rfsan: fclean fsan
 
-.PHONY: all clean fclean re bonus fsan fsanre tester test tclean
+.PHONY: all re clean fclean tester tclean test fsan rfsan leak

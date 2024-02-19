@@ -23,11 +23,13 @@ typedef struct  s_sym
 
 typedef struct  s_data
 {
+    int         fstat_size;
     char        *ptr;
-    Elf64_Ehdr  *header;        // pointeur vers debut ELF
-    Elf64_Shdr  *sections;      // pointeur vers debut sections
-    Elf64_Sym   *symtab;        // pointeur vers debut symtab
-    int         symtab_index_in_sh;
+    Elf64_Ehdr  *header;             // pointeur vers debut ELF
+    Elf64_Shdr  *sections_hdrs;      // pointeur vers debut sections
+    int         symtab_index;        // index de symtab in sections_hdrs
+    Elf64_Sym   *symtab;             // pointeur vers debut symtab
+    // Elf64_Shdr  *symtab_section_h;
     t_lst       *syms;
 }					t_data;
 

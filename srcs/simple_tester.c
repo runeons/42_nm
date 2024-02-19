@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <utils_colors.h>
 
-# define MAX_LEN 4096 // TO DO
+# define MAX_LEN 40960 // TO DO
 # define NM_LETTERS "wWaUtTdDrRbB" // cf. symbols
 
 // TO DO check_line_format
@@ -121,7 +121,11 @@ int main(int ac, char **av)
     clean("./tmp_syst", syst, &syst_len);
     // system("rm tmp_syst");
     if (mine_len != syst_len)
+    {
         printf("mine_len != syst_len (%d != %d)\n", mine_len, syst_len);
+        printf(C_G_RED  "[KO]"C_RES"\n");
+        return (1);
+    }
     cmp = compare(mine, syst, mine_len);
     if (cmp != -1)
     {

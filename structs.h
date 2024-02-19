@@ -122,7 +122,9 @@ symbol table index is a subscript into this array.
 
 
 
-/user/include/elf.h
+/usr/include/elf.h
+
+ST_BIND ET ST_TYPE
 
 /* Legal values for ST_BIND subfield of st_info (symbol binding).  */
 
@@ -151,3 +153,16 @@ symbol table index is a subscript into this array.
 #define STT_HIOS        12              /* End of OS-specific */
 #define STT_LOPROC      13              /* Start of processor-specific */
 #define STT_HIPROC      15              /* End of processor-specific */
+
+E_TYPE
+
+#define ET_NONE         0               /* No file type */
+#define ET_REL          1               /* Relocatable file */     =====> .o
+#define ET_EXEC         2               /* Executable file */
+#define ET_DYN          3               /* Shared object file */   =====> .so   a.out
+#define ET_CORE         4               /* Core file */
+#define ET_NUM          5               /* Number of defined types */
+#define ET_LOOS         0xfe00          /* OS-specific range start */
+#define ET_HIOS         0xfeff          /* OS-specific range end */
+#define ET_LOPROC       0xff00          /* Processor-specific range start */
+#define ET_HIPROC       0xffff          /* Processor-specific range end */

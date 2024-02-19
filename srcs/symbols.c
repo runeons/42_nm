@@ -23,7 +23,7 @@ char calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
     else if (type == STT_FUNC)
         return capitalise('t', bind);
 
-    if (sym.st_shndx >= 20 && sym.st_shndx <= 25) // 10 may be OS dependent
+    if (sym.st_shndx >= 21 && sym.st_shndx <= 25) // 20 may be OS dependent
         return capitalise('d', bind);
     if (sym.st_shndx >= 17 && sym.st_shndx <= 20)
         return capitalise('r', bind);
@@ -48,19 +48,24 @@ void init_sym(t_data *dt, int index)
 
     if ((new_sym = mmalloc(sizeof(t_sym))) == NULL)
         exit_error("init_sym\n");
-    new_sym->raw   = &dt->symtab[index];
+    new_sym->raw        = &dt->symtab[index];
     new_sym->value      = 0;
     new_sym->letter     = '\0';
     new_sym->name       = NULL;
     new_sym->type       = 0;
     new_sym->bind       = 0;
+    // printf(C_G_RED"[QUICK DEBUG] : %p"C_RES"\n", new_sym);
+    // printf(C_G_RED"[QUICK DEBUG] : %p"C_RES"\n", dt);
+    // printf(C_G_RED"[QUICK DEBUG] : %p"C_RES"\n", &dt);
+    // printf(C_G_RED"[QUICK DEBUG] : %p"C_RES"\n", &dt->syms);
     ft_lst_add_node_back(&dt->syms, ft_lst_create_node(new_sym));
+    // printf(C_G_YELLOW"[QUICK DEBUG] HERE"C_RES"\n");
 }
 
 void fill_sym(t_data *dt, int index)
 {
     Elf64_Sym       *symtab = dt->symtab;
-    Elf64_Shdr      symtab_section_h = (Elf64_Shdr)dt->sections[dt->symtab_index_in_sh];
+    Elf64_Shdr      symtab_section_h = (Elf64_Shdr)dt->sections_hdrs[dt->symtab_index];
     t_lst           *sym_node = ft_lst_get_node_at_index(&dt->syms, index);
     unsigned char   info;
     char            *strtab;
@@ -69,7 +74,7 @@ void fill_sym(t_data *dt, int index)
     {
         t_sym *sym = (t_sym *)sym_node->content;
 
-        strtab = (char *)(dt->ptr + dt->sections[symtab_section_h.sh_link].sh_offset);
+        strtab = (char *)(dt->ptr + dt->sections_hdrs[symtab_section_h.sh_link].sh_offset);
         info = (unsigned char)symtab[index].st_info;
         sym->value = symtab[index].st_value;
         sym->type = ELF64_ST_TYPE((int)info);
