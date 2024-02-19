@@ -43,7 +43,7 @@ SRCS_LIST					=	\
 							debug.c \
 							exit.c \
 							nm.c \
-							syms_0_read.c \
+							syms_0_store.c \
 							syms_1_sort.c \
 							syms_2_display.c \
 

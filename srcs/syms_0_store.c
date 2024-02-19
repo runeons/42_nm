@@ -22,9 +22,11 @@ char    calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
         return 'W';
     else if (type == STT_FUNC)
         return capitalise('t', bind);
+    if (sym.st_shndx >= 14)
+        return capitalise('r', bind);
     if (sym.st_shndx >= 17 && sym.st_shndx <= 20) // could make it prettier
         return capitalise('r', bind);
-    if (sym.st_shndx >= 21 && sym.st_shndx <= 25) // 20 may be OS dependent
+    if (sym.st_shndx >= 21 && sym.st_shndx <= 25) // 20 may be OS dependent // could use a method more robust than numbers
         return capitalise('d', bind);
     if (sym.st_shndx == 26)
         return capitalise('b', bind);
