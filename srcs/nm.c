@@ -26,6 +26,7 @@ void init_elf_ptrs(t_data *dt)
     if ((dt->header = (Elf64_Ehdr *)dt->ptr) == NULL)
         exit_error("eheader");
     // debug_eheader(*dt->header);
+    check_offset_boundaries(dt, dt->header->e_shoff);
     if ((dt->sections_hdrs = (Elf64_Shdr *)((char *)dt->ptr + dt->header->e_shoff)) == NULL)
         exit_error("sheader");
     // debug_one_sheader(*dt->sections_hdrs);
