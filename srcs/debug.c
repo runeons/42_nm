@@ -1,23 +1,5 @@
 #include <nm_functions.h>
 
-void    debug_to_fix(t_data *dt, int i)
-{
-    if (dt)
-    {
-        t_lst *sym_node = ft_lst_get_node_at_index(&dt->syms, i);
-        if (sym_node)
-        {
-            t_sym *current_sym = (t_sym *)sym_node->content;
-            // if (current_sym->letter == 'r')
-            if (current_sym->raw->st_shndx == 20)
-            {
-                printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);
-                debug_one_sym(*current_sym->raw);
-            }
-        }
-    }
-}
-
 void    debug_eheader(const Elf64_Ehdr h)
 {
     printf("\n");

@@ -56,7 +56,7 @@ void    load_file_in_memory(t_data *dt, char *filename)
     struct stat buf;
 
     fd = 0;
-    memset(&buf, '\0', sizeof(buf));
+    ft_memset(&buf, '\0', sizeof(buf));
     if ((fd = open(filename, O_RDONLY)) < 0)
         exit_error("open");
     if (fstat(fd, &buf) < 0)
@@ -79,7 +79,7 @@ void    nm(char *filename)
 {
     t_data      dt;
 
-    memset(&dt, '\0', sizeof(dt));
+    ft_memset(&dt, '\0', sizeof(dt));
     load_file_in_memory(&dt, filename);
     nm_wrapper(&dt);
     unload_file_and_clear(&dt);

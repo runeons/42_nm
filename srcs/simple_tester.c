@@ -24,7 +24,7 @@
 
 // void    exit_parsing(char *line)
 // {
-//     printf(C_G_RED"Error:"C_G_WHITE"%s\n"C_RES, line);
+//     printf(C_G_RED"Error :"C_G_WHITE"%s\n"C_RES, line);
 // }
 
 // void    check_line_format(char *line)
@@ -32,21 +32,21 @@
 //     const char *ptr = line;
 
 //     if (ft_strlen(line) <= 20)
-//         exit_err("Error: file is not an nm output.\n");
+//         exit_err("Error : file is not an nm output.\n");
 //     for (int i = 0; i < 16; i++)
 //     {
 //         if (!ft_isdigit(*ptr) && (*ptr) != ' ')
-//             exit_err("Error: file is not an nm output.\n");
+//             exit_err("Error : file is not an nm output.\n");
 //         ptr++;
 //     }
 //     if (*ptr++ != ' ')
-//         exit_err("Error: file is not an nm output.\n");
+//         exit_err("Error : file is not an nm output.\n");
 //     if (is_nm_letter(*ptr++))
-//         exit_err("Error: file is not an nm output.\n");
+//         exit_err("Error : file is not an nm output.\n");
 //     if (*ptr++ != ' ')
-//         exit_err("Error: file is not an nm output.\n");
+//         exit_err("Error : file is not an nm output.\n");
 //     if (!ft_isalpha(*ptr++))
-//         exit_err("Error: file is not an nm output.\n");
+//         exit_err("Error : file is not an nm output.\n");
 // }
 
 typedef struct  s_cmd
@@ -108,7 +108,7 @@ void    get_command(char cmd[256], char *format, char *exec, char *file, char *o
     if (len >= 256)
         exit_err("filename too long");
     snprintf(cmd, len, format, exec, file, output);
-    printf("cmd: %s\n", cmd);
+    // printf("cmd: %s\n", cmd);/
 }
 
 void    init(t_cmd *cmd, char *filename, char *exec, char *output)
@@ -140,17 +140,17 @@ void compare(t_cmd cmd1, t_cmd cmd2)
     int     cmp;
 
     if (cmd1.output_len != cmd2.output_len)
-        printf(C_G_BLUE"Info: "C_G_RED"[KO] "C_RES"Output lengths differ (%d != %d)\n", cmd1.output_len, cmd2.output_len);
+        printf(C_G_BLUE"Info  : "C_G_RED"[KO] "C_RES"Output lengths differ (%d != %d)\n", cmd1.output_len, cmd2.output_len);
     cmp = compare_outputs(cmd1.res, cmd2.res, cmd1.output_len);
     if (cmp != -1)
     {
-        printf(C_G_BLUE"Info: "C_G_RED"[KO]"C_RES"\n");
-        printf(C_G_RED"Error:"C_RES" files differ from position %d - please see below\n", cmp);
-        printf(C_G_BLUE"Info: "C_RED"[My result]"C_RES" [%.32s]\n", &cmd1.res[cmp]);
-        printf(C_G_BLUE"Info: "C_GREEN"[Expected]"C_RES" [%.32s]\n", &cmd2.res[cmp]);
+        printf(C_G_RED"Result: [KO]"C_RES"\n");
+        printf(C_G_RED"Error :"C_RES" files differ from position %d - please see below\n", cmp);
+        printf(C_G_BLUE"Info  : "C_RED"[My result]"C_RES" [%.32s]\n", &cmd1.res[cmp]);
+        printf(C_G_BLUE"Info  : "C_GREEN"[Expected]"C_RES" [%.32s]\n", &cmd2.res[cmp]);
     }
     else
-        printf(C_G_BLUE"Info: "C_G_GREEN"[OK]"C_RES"\n");
+        printf(C_G_GREEN"Result: [OK]"C_RES"\n");
 }
 
 int main(int ac, char **av)
@@ -159,12 +159,12 @@ int main(int ac, char **av)
     t_cmd   cmd2;
 
     if (ac != 2)
-        exit_err(C_G_RED"Error: "C_RES"filename required\n");
+        exit_err(C_G_RED"Error : "C_RES"filename required\n");
     init(&cmd1, av[1], "./ft_nm", "tmp1");
     init(&cmd2, av[1], "nm -a", "tmp2");
     launch(&cmd1);
     launch(&cmd2);
-    printf(C_G_BLUE"Info: "C_RES"comparing results on '%s'\n", av[1]);
+    printf(C_G_BLUE"Info  : "C_RES"comparing results on '%s'\n", av[1]);
     compare(cmd1, cmd2);
     free_all_malloc();
     return (0);
