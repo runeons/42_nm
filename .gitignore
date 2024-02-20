@@ -1,8 +1,7 @@
 a.out
 ft_nm
 tester
-tmp_mine
-tmp_syst
+tmp*
 bin/
 objs/
 archives/

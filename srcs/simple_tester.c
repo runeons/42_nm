@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <utils_colors.h>
 
-# define MAX_LEN 40960 // TO DO
+# define MAX_LEN 4096 // TO DO
 # define NM_LETTERS "wWaUtTdDrRbB" // cf. symbols
 
 // TO DO check_line_format
@@ -49,6 +49,16 @@
 //         exit_err("Error: file is not an nm output.\n");
 // }
 
+typedef struct  s_cmd
+{
+    char    cmd[256];
+    char    *res;
+    char    *exec;
+    char    *filename;
+    char    *output;
+    int     output_len;
+}               t_cmd;
+
 void clean(char *file, char *res ,int *size)
 {
     int     i = 0;
@@ -67,7 +77,7 @@ void clean(char *file, char *res ,int *size)
         int n = ft_strlen(line) - 16;
         strncpy(&res[i], line + 17, n);
         res[i + n - 1] = '\n';
-        free(line);
+        // free(line);
         i += n;
     }
     res[i] = '\0';
@@ -75,67 +85,87 @@ void clean(char *file, char *res ,int *size)
     close(fd);
 }
 
-int    compare(char *mine, char *syst, int len)
+int    compare_outputs(char *res1, char *res2, int len)
 {
     int i = 0;
 
-    for (i = 0; i < len; i++) // TO DO TMP
+    for (i = 0; i < len; i++)
     {
-        if (mine[i] != syst[i])
+        if (res1[i] != res2[i])
             return (i);
         i++;
     }
     return (-1);
 }
 
-int main(int ac, char **av)
+void    get_command(char cmd[256], char *format, char *exec, char *file, char *output)
 {
-    (void)ac;
-    (void)av;
-    char    *mine = NULL;
-    char    *syst = NULL;
-    int     mine_len;
-    int     syst_len;
-    int     cmp;
-    if (ac != 2)
-    {
-        fprintf(stderr, "Usage: %s <filename>\n", av[0]);
-        exit(EXIT_FAILURE);
-    }
+    int len;
 
-    char command_mine[256];
-    char command_syst[256];
-    snprintf(command_mine, sizeof(command_mine), "./ft_nm %s > tmp_mine", av[1]);
-    snprintf(command_syst, sizeof(command_syst), "nm -a %s > tmp_syst", av[1]);
-    printf("Testing for : %s\n", av[1]);
-    if ((mine = malloc(MAX_LEN)) == NULL)
+    if (ft_strlen(file) > 230)
+        exit_err("filename too long");
+    len = ft_strlen(format) + ft_strlen(exec) + ft_strlen(file) + ft_strlen(output) - 5;
+    if (len >= 256)
+        exit_err("filename too long");
+    snprintf(cmd, len, format, exec, file, output);
+    printf("cmd: %s\n", cmd);
+}
+
+void    init(t_cmd *cmd, char *filename, char *exec, char *output)
+{
+    cmd->filename   = ft_strdup(filename);
+    cmd->exec       = ft_strdup(exec);
+    cmd->output     = ft_strdup(output);
+}
+
+void launch(t_cmd *cmd)
+{
+    struct stat buf;
+    int         fd = 0;
+
+    get_command(cmd->cmd, "%s %s > %s", cmd->exec, cmd->filename, cmd->output);
+    system(cmd->cmd);
+    if ((fd = open(cmd->output, O_RDONLY)) == -1)
+        exit_err("open");
+    if (fstat(fd, &buf) < 0)
+        exit_err("fstat");
+    if ((cmd->res = mmalloc(buf.st_size)) == NULL)
         exit_err("Allocation failure");
-    if ((syst = malloc(MAX_LEN)) == NULL)
-        exit_err("Allocation failure");
-    system(command_mine);
-    // system("./ft_nm a.out > tmp_mine");
-    clean("./tmp_mine", mine, &mine_len);
-    // system("rm tmp_mine");
-    system(command_syst);
-    // system("nm -a a.out > tmp_syst");
-    clean("./tmp_syst", syst, &syst_len);
-    // system("rm tmp_syst");
-    if (mine_len != syst_len)
-    {
-        printf("mine_len != syst_len (%d != %d)\n", mine_len, syst_len);
-        printf(C_G_RED  "[KO]"C_RES"\n");
-        return (1);
-    }
-    cmp = compare(mine, syst, mine_len);
+    ft_memset(cmd->res, '\0', buf.st_size);
+    clean(ft_strjoin("./", cmd->output), cmd->res, &cmd->output_len);
+}
+
+void compare(t_cmd cmd1, t_cmd cmd2)
+{
+    int     cmp;
+
+    if (cmd1.output_len != cmd2.output_len)
+        printf(C_G_BLUE"Info: "C_G_RED"[KO] "C_RES"Output lengths differ (%d != %d)\n", cmd1.output_len, cmd2.output_len);
+    cmp = compare_outputs(cmd1.res, cmd2.res, cmd1.output_len);
     if (cmp != -1)
     {
-        printf(C_G_RED"Error:"C_RES" files differ from position %d\n", cmp);
-        printf(C_G_RED  "[MINE]: %.32s"C_RES"\n", &mine[cmp]);
-        printf(C_G_GREEN"[SYST]: %.32s"C_RES"\n", &syst[cmp]);
+        printf(C_G_BLUE"Info: "C_G_RED"[KO]"C_RES"\n");
+        printf(C_G_RED"Error:"C_RES" files differ from position %d - please see below\n", cmp);
+        printf(C_G_BLUE"Info: "C_RED"[My result]"C_RES" [%.32s]\n", &cmd1.res[cmp]);
+        printf(C_G_BLUE"Info: "C_GREEN"[Expected]"C_RES" [%.32s]\n", &cmd2.res[cmp]);
     }
     else
-        printf(C_G_GREEN  "[OK]"C_RES"\n");
-    free(mine);
-    free(syst);
+        printf(C_G_BLUE"Info: "C_G_GREEN"[OK]"C_RES"\n");
+}
+
+int main(int ac, char **av)
+{
+    t_cmd   cmd1;
+    t_cmd   cmd2;
+
+    if (ac != 2)
+        exit_err(C_G_RED"Error: "C_RES"filename required\n");
+    init(&cmd1, av[1], "./ft_nm", "tmp1");
+    init(&cmd2, av[1], "nm -a", "tmp2");
+    launch(&cmd1);
+    launch(&cmd2);
+    printf(C_G_BLUE"Info: "C_RES"comparing results on '%s'\n", av[1]);
+    compare(cmd1, cmd2);
+    free_all_malloc();
     return (0);
 }
