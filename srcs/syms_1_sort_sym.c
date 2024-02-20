@@ -1,0 +1,65 @@
+#include <nm_functions.h>
+
+void    lower_if_needed(char **name)
+{
+    size_t len = ft_strlen(*name);
+
+    for (size_t i = 0; i < len; i++)
+    {
+        if ((*name)[i] >= 'A' && (*name)[i] <= 'Z')
+            (*name)[i] = (*name)[i] + 32;
+    }
+}
+
+int    is_special_char(char c)
+{
+    if (c >= 33 && c <= 126)
+    {
+        if (ft_isalnum(c))
+		    return (0);
+    }
+	return (1);
+}
+
+void    remove_special_chars(char **name)
+{
+    char *current = *name;
+    char *result  = *name;
+
+    while (*current != '\0')
+    {
+        if (is_special_char(*current) == 0)
+        {
+            *result = *current;
+            result++;
+        }
+        current++;
+    }
+    *result = '\0';
+}
+
+char    *get_cleaned_sym_str(const void *symbol)
+{
+    t_sym   *sym;
+    char    *name;
+    
+    if (symbol == NULL)
+        exit_corrupted("NULL symbol");
+    sym = *(t_sym **)symbol;
+    if (sym == NULL)
+        exit_corrupted("NULL symbol");
+    name = ft_strdup(sym->name);
+    remove_special_chars(&name);
+    lower_if_needed(&name);
+    return (name);
+}
+
+int     compare_sym(const void *a, const void *b)
+{
+    char *name_a;
+    char *name_b;
+
+    name_a = get_cleaned_sym_str(a);
+    name_b = get_cleaned_sym_str(b);
+    return (ft_strcmp(name_a, name_b));
+}
