@@ -24,7 +24,8 @@ void    debug_eheader(const Elf64_Ehdr h);
 void    debug_one_sheader(const Elf64_Shdr h);
 void    debug_one_sym(const Elf64_Sym sym);
 
-// symbols
+// store / type
+void    fill_sym(t_data *dt, int index);
 void    read_and_store_syms(t_data *dt);
 
 // display

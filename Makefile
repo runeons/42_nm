@@ -44,6 +44,7 @@ SRCS_LIST					=	\
 							exit.c \
 							nm.c \
 							syms_0_store.c \
+							syms_0_type.c \
 							syms_1_sort_general.c \
 							syms_1_sort_letter.c \
 							syms_1_sort_sym.c \
