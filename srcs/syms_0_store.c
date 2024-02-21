@@ -49,6 +49,7 @@ void    debug_to_fix(t_data *dt, int i)
 void    read_and_store_syms(t_data *dt)
 {
     int syms_nb;
+    // t_sym *sym;
 
     if ((syms_nb = find_nb_symbols(dt)) == 0)
         exit_msg("No symbols");
@@ -57,6 +58,9 @@ void    read_and_store_syms(t_data *dt)
     {
         create_new_sym(dt, i); // could improve and return new sym instead of using index
         fill_sym(dt, i);       // so that I can use it here and skip double checking
+        // t_sym *sym = (t_sym *)ft_lst_get_node_at_index(&dt->syms, i)->content;
+        // debug_one_tsym(*sym);
+
         // debug_to_fix(dt, i);
     }
 }

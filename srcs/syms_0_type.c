@@ -1,38 +1,26 @@
 #include <nm_functions.h>
 
-
-// typedef struct  s_type
-// {
-//     Elf64_Sym       *raw;
-//     char            *section_name;
-//     char            letter;
-//     char            *name;
-//     unsigned char   type;
-//     unsigned char   bind;
-// }               t_type;
-
-// // letter, capitalise, section_location
-// {
-//     'b', "1", ".bss", // bss uninitializes
-//     'd', "1", ".data", // initialized
-//     'g', "1", "", // initialized for small objects
-//     'p', "0", "", // stack unwind
-//     'r', "1", ".rodata", // read only 
-//     's', "1", "", // uninitialized or zero-initialized data section for small objects
-//     't', "1", ".text", // executable text (code) section
-
-//     'a', "?", "", // ? type - STT_FILE
-//     'A', "?", "", // absolute
-//     'C', "0", "", // common (inc. uninitialized)
-//     'i', "0", "", // indirect functions
-//     'N', "0", ".debug", // debug
-//     'u', "0", "", // unique global
-//     'U', "0", "", // undefined
-//     'v', "1", "", // weak object
-//     'w', "1", "", // weak symbol not weak object
-//     '-', "0", "", // stabs symbol
-//     '?', "0", "", // unknown
-// }
+t_type all_types[] =
+{
+    {'b', 1, ".bss",             },//  -1, -1// bss uninitializes
+    {'d', 1, ".data",            },//  -1, -1// initialized
+    {'g', 1, "",                 },//  -1, -1// initialized for small objects
+    {'p', 0, "",                 },//  -1, -1// stack unwind
+    {'r', 1, ".rodata",          },//  -1, -1// read only 
+    {'s', 1, "",                 },//  -1, -1// uninitialized or zero-initialized data section for small objects
+    {'t', 1, ".text",            },//  -1, -1// executable text (code) section
+    {'a', -1, "",                 },//  -1, -1// ? capitalise type - STT_FILE
+    {'A', -1, "",                 },//  -1, -1// ? capitalise absolute
+    {'C', 0, "",                 },//  -1, -1// common (inc. uninitialized)
+    {'i', 0, "",                 },//  -1, -1// indirect functions
+    {'N', 0, ".debug",           },//  -1, -1// debug
+    {'u', 0, "",                 },//  -1, -1// unique global
+    {'U', 0, "",                 },//  -1, -1// undefined
+    {'v', 1, "",                 },//  -1, -1// weak object
+    {'w', 1, "",                 },//  -1, -1// weak symbol not weak object
+    {'-', 0, "",                 },//  -1, -1// stabs symbol
+    {'?', 0, "",                 },//  -1, -1// unknown
+};
 
 
 // not used PREDEFINED USER sections = 
@@ -51,37 +39,67 @@ char    capitalise(char letter, unsigned char bind)
     return '?';
 }
 
-char    calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
+char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
 {
-    if (sym.st_value == 0)
-        if (bind == STB_WEAK) 
+    // printf(C_G_BLUE"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
+    if (raw_sym.st_value == 0)
+        if (sym->bind == STB_WEAK) 
             return 'w';
-        else if (type == STT_FILE)
+        else if (sym->type == STT_FILE)
             return 'a';
         else
             return 'U';
-    else if (bind == STB_WEAK)
+    else if (sym->bind == STB_WEAK)
         return 'W';
-    else if (type == STT_FUNC)
-        return capitalise('t', bind);
-    if (sym.st_shndx == 14)
-        return capitalise('r', bind);
-    if (sym.st_shndx >= 17 && sym.st_shndx <= 20) // could make it prettier
-        return capitalise('r', bind);
-    if (sym.st_shndx >= 21 && sym.st_shndx <= 25) // 20 may be OS dependent // could use a method more robust than numbers
-        return capitalise('d', bind);
-    if (sym.st_shndx == 26)
-        return capitalise('b', bind);
-    if (sym.st_shndx == 4)
-        return capitalise('r', bind);
-    // if (type == STT_OBJECT)
+    else if (sym->type == STT_FUNC)
+        return capitalise('t', sym->bind);
+    // printf(C_G_RED"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
+    if (sym->section_name)
+    {
+        if (!ft_strcmp(sym->section_name, ".rodata"))
+            return capitalise('r', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".data"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".bss"))
+            return capitalise('b', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".fini_array"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".init_array"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".eh_frame"))
+            return capitalise('r', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".dynamic"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".eh_frame_hdr"))
+            return capitalise('r', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".data.rel.ro"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".got.plt"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".tbss"))
+            return capitalise('b', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".got"))
+            return capitalise('d', sym->bind);
+        if (!ft_strcmp(sym->section_name, ".note.ABI-tag"))
+            return capitalise('r', sym->bind);
+    }
+
+    printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
+    printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
+    printf(C_G_BLUE"              sym->type: %d"C_RES"\n", sym->type);
+    printf(C_G_BLUE"              sym->bind: %d"C_RES"\n", sym->bind);
+    printf(C_G_RED"               sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
+
+
+    // if (sym->type == STT_OBJECT)
     //     return 'Z';
-    // if (type == STT_COMMON)
+    // if (sym->type == STT_COMMON)
     //     return 'C';
-    // if (type == STT_SECTION)
+    // if (sym->type == STT_SECTION)
     //     return 'Y';
     return '?';
 }
+
 
 char    *get_section_name(t_data *dt, t_sym *sym)
 {
@@ -131,7 +149,8 @@ void    fill_sym(t_data *dt, int index)
     sym->value          = dt->symtab[index].st_value;
     sym->type           = ELF64_ST_TYPE((int)info);
     sym->bind           = ELF64_ST_BIND((int)info);
-    sym->letter         = calc_letter(dt->symtab[index], sym->type, sym->bind);
     sym->name           = fill_name(dt, sym, index);
     sym->section_name   = get_section_name(dt, sym);
+    sym->letter         = fill_type(dt->symtab[index], sym);
+    // debug_one_tsym(*sym);
 }

@@ -49,3 +49,15 @@ void    debug_one_sym(const Elf64_Sym sym)
     printf("st_value    : %"PFu_64"\n", sym.st_value);    // N-dependant
     printf("st_size     : %"PFu_64"\n", sym.st_size);
 }
+
+void    debug_one_tsym(t_sym sym)
+{
+    printf("\n");
+    printf("----------   \n");
+    printf("value       : %"PFu_64"\n", sym.value);
+    printf("letter      : %c\n", sym.letter);
+    printf("name        : %s\n", sym.name);
+    printf("section_name: %s\n", sym.section_name);
+    printf("type        : %"PFu_c8"\n", sym.type);
+    printf("bind        : %"PFu_c8"\n", sym.bind);
+}

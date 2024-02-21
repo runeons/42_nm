@@ -11,6 +11,15 @@
 # define PFu_32      "u"
 # define PFu_64      "lu"
 
+typedef struct s_type
+{
+    char            letter;
+    int             capitalise;
+    char            *section_name;
+    // unsigned char   raw_type;
+    // unsigned char   raw_bind;
+}              t_type;
+
 typedef struct  s_sym
 {
     Elf64_Sym       *raw;
@@ -33,6 +42,7 @@ typedef struct  s_data
     int         symtab_index;           // index de symtab in shdr
     Elf64_Sym   *symtab;                // debut symtab
     t_lst       *syms;
+    t_lst       *types;
 }					t_data;
 
 #endif
