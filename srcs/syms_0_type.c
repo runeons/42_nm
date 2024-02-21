@@ -85,29 +85,15 @@ char    calc_letter(const Elf64_Sym sym, unsigned char type, unsigned char bind)
 
 char    *get_section_name(t_data *dt, t_sym *sym)
 {
-    Elf64_Shdr          *sh_strtab;
-    char                *sh_strtab_p;
-    int                 section_index;
-    int                 sh_nb;
-    unsigned int        section_name_value;
-    char                *section_name;
+    char            *section_name;
+    unsigned int    section_name_offset;
 
-    if (sym == NULL)
+    if (sym == NULL || dt->shdr == NULL || dt->sh_strtab  == NULL || dt->sh_strtab_p == NULL)
         return (NULL);
-    if ((sh_strtab = &dt->sections_hdrs[dt->header->e_shstrndx]) == NULL)
+    if (sym->raw->st_shndx > dt->ehdr->e_shnum) // if current index > nb sections
         return (NULL);
-    sh_strtab_p = dt->ptr + sh_strtab->sh_offset;
-    if (dt->sections_hdrs == NULL || sh_strtab_p == NULL)
-        return (NULL);
-    section_index = sym->raw->st_shndx;
-    sh_nb = dt->header->e_shnum;
-    if (section_index > sh_nb)
-        return (NULL);
-    section_name_value = dt->sections_hdrs[section_index].sh_name;
-    section_name = sh_strtab_p + section_name_value;
-    // printf(C_G_RED"[QUICK DEBUG] : section_index %d"        C_RES"\n", section_index);
-    // printf(C_G_RED"[QUICK DEBUG] : section_name_value %d"   C_RES"\n", section_name_value);
-    // printf(C_G_RED"[QUICK DEBUG] : section_name %s"         C_RES"\n", section_name);
+    section_name_offset = dt->shdr[sym->raw->st_shndx].sh_name;
+    section_name = dt->sh_strtab_p + section_name_offset;
     return (section_name);
 }
 
@@ -116,18 +102,16 @@ char    *fill_name(t_data *dt, t_sym *sym, int index)
     Elf64_Shdr      symtab_section_h;
     char            *strtab;
 
-    if (dt->sections_hdrs == NULL || dt->symtab_index > (int)sizeof(*dt->sections_hdrs))
-        exit_corrupted("corruption in sections_hdrs");
-    symtab_section_h = (Elf64_Shdr)dt->sections_hdrs[dt->symtab_index];;
-    if (dt->sections_hdrs == NULL || symtab_section_h.sh_link > (int)sizeof(*dt->sections_hdrs))
+    if (dt->shdr == NULL || dt->symtab_index > (int)sizeof(*dt->shdr))
+        exit_corrupted("corruption in shdr");
+    symtab_section_h = (Elf64_Shdr)dt->shdr[dt->symtab_index];;
+    if (dt->shdr == NULL || symtab_section_h.sh_link > (int)sizeof(*dt->shdr))
         exit_corrupted("corruption in symtab_section_h");
-    check_offset_boundaries(dt, dt->sections_hdrs[symtab_section_h.sh_link].sh_offset);
-    strtab = (char *)(dt->ptr + dt->sections_hdrs[symtab_section_h.sh_link].sh_offset);
+    check_offset_boundaries(dt, dt->shdr[symtab_section_h.sh_link].sh_offset);
+    strtab = (char *)(dt->ptr + dt->shdr[symtab_section_h.sh_link].sh_offset);
     if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab[index].st_name) + 1)) == NULL) // should I check name format and len
         exit_error("fill_name\n");
     ft_strcpy(sym->name, strtab + dt->symtab[index].st_name); // TO DO use ft_strncpy
-    // char *name = get_section_name(dt, sym);
-    // printf(C_G_RED"[QUICK DEBUG] name: %s"C_RES"\n", name);
     return (sym->name);
 }
 
@@ -144,9 +128,10 @@ void    fill_sym(t_data *dt, int index)
     if ((sym = (t_sym *)sym_node->content) == NULL)
         exit_corrupted("fill_sym");
     info = (unsigned char)dt->symtab[index].st_info;
-    sym->value      = dt->symtab[index].st_value;
-    sym->type       = ELF64_ST_TYPE((int)info);
-    sym->bind       = ELF64_ST_BIND((int)info);
-    sym->letter     = calc_letter(dt->symtab[index], sym->type, sym->bind);
-    sym->name       = fill_name(dt, sym, index);
+    sym->value          = dt->symtab[index].st_value;
+    sym->type           = ELF64_ST_TYPE((int)info);
+    sym->bind           = ELF64_ST_BIND((int)info);
+    sym->letter         = calc_letter(dt->symtab[index], sym->type, sym->bind);
+    sym->name           = fill_name(dt, sym, index);
+    sym->section_name   = get_section_name(dt, sym);
 }

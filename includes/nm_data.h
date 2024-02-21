@@ -17,6 +17,7 @@ typedef struct  s_sym
     uint64_t        value;
     char            letter;
     char            *name;
+    char            *section_name;
     unsigned char   type;
     unsigned char   bind;
 }               t_sym;
@@ -25,10 +26,12 @@ typedef struct  s_data
 {
     int         fstat_size;
     char        *ptr;
-    Elf64_Ehdr  *header;             // pointeur vers debut ELF
-    Elf64_Shdr  *sections_hdrs;      // pointeur vers debut sections
-    int         symtab_index;        // index de symtab in sections_hdrs
-    Elf64_Sym   *symtab;             // pointeur vers debut symtab
+    Elf64_Ehdr  *ehdr;                  // debut ELF
+    Elf64_Shdr  *shdr;                  // debut sections
+    Elf64_Shdr  *sh_strtab;             // section ehdr strtab
+    char        *sh_strtab_p;           // debut section strtab
+    int         symtab_index;           // index de symtab in shdr
+    Elf64_Sym   *symtab;                // debut symtab
     t_lst       *syms;
 }					t_data;
 
