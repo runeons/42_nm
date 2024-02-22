@@ -35,6 +35,7 @@ void    display_syms(t_lst *syms);
 
 // sort
 int     compare_sym(const void *a, const void *b);
+int     compare_values(const void *a, const void *b);
 int     compare_letters(const void *a, const void *b);
 void    sort_syms(t_lst **syms);
 

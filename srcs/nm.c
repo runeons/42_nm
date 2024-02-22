@@ -12,7 +12,7 @@ Elf64_Sym    *find_symtab(t_data *dt)
                 check_sheader_format(dt->shdr[i]);
                 check_offset_boundaries(dt, dt->shdr[i].sh_offset);
                 if ((symtab = (Elf64_Sym *)((char *)dt->ptr + dt->shdr[i].sh_offset)) == NULL)
-                    exit_error("symtab");
+                    exit_error("find symtab");
                 dt->symtab_index = i;
                 // debug_one_sheader(dt->shdr[i]);
                 return (symtab);
@@ -36,7 +36,7 @@ void init_elf_ptrs(t_data *dt)
     if ((dt->sh_strtab_p = (char *)(dt->ptr + dt->sh_strtab->sh_offset)) == NULL)
         exit_error("sh_strtab_p");
     if ((dt->symtab = find_symtab(dt)) == NULL)
-        exit_error("symtab");
+        exit_msg("no symbols");
 }
 
 void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so

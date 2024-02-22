@@ -39,6 +39,7 @@ void    sort_syms(t_lst **syms)
     if (sym_nb > 1)
     {
         sym_array = copy_to_array(syms, sym_nb);
+        qsort(sym_array, sym_nb, sizeof(t_sym *), compare_values);
         qsort(sym_array, sym_nb, sizeof(t_sym *), compare_letters);
         qsort(sym_array, sym_nb, sizeof(t_sym *), compare_sym);
         copy_back_to_list(syms, sym_array, sym_nb);
