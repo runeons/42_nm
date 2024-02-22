@@ -120,11 +120,11 @@ char    *fill_name(t_data *dt, t_sym *sym, int index)
     Elf64_Shdr      symtab_section_h;
     char            *strtab;
 
-    if (dt->shdr == NULL || dt->symtab_index > (int)sizeof(*dt->shdr))
-        exit_corrupted("corruption in shdr");
+    if (dt->symtab_index > (*dt->ehdr).e_shnum)
+        exit_corrupted("shdr index out-of-band");
     symtab_section_h = (Elf64_Shdr)dt->shdr[dt->symtab_index];;
-    if (dt->shdr == NULL || symtab_section_h.sh_link > (int)sizeof(*dt->shdr))
-        exit_corrupted("corruption in symtab_section_h");
+    if (symtab_section_h.sh_link > (*dt->ehdr).e_shnum)
+        exit_corrupted("shdr index out-of-band");
     check_offset_boundaries(dt, dt->shdr[symtab_section_h.sh_link].sh_offset);
     strtab = (char *)(dt->ptr + dt->shdr[symtab_section_h.sh_link].sh_offset);
     if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab[index].st_name) + 1)) == NULL) // should I check name format and len

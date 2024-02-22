@@ -15,6 +15,7 @@
 // exit
 void    exit_error(const char *msg);
 void    exit_corrupted(const char *msg);
+void    warning(const char *msg);
 void    exit_msg(const char *msg);
 void    exit_error_close(const char *msg, int fd);
 

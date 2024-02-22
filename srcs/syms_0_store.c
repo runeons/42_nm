@@ -18,8 +18,10 @@ int    find_nb_symbols(t_data *dt)
     Elf64_Shdr  symtab_section_h;
     
     syms_nb = 0;
-    if (dt->shdr == NULL || dt->symtab_index > (int)sizeof(*dt->shdr))
-        exit_corrupted("corruption in shdr");
+    if (dt->shdr == NULL) //
+        exit_corrupted("corruption in shdr (nb1)");
+    if (dt->symtab_index > (*dt->ehdr).e_shnum)
+        exit_corrupted("shdr index out-of-band");
     symtab_section_h = (Elf64_Shdr)dt->shdr[dt->symtab_index];
     // debug_one_sheader(symtab_section_h);
     if (symtab_section_h.sh_entsize == 0)

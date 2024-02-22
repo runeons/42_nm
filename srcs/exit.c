@@ -14,6 +14,11 @@ void exit_corrupted(const char *msg)
     exit(1);
 }
 
+void warning(const char *msg)
+{
+    printf(C_G_BLUE"Warning: "C_RES"nm: %s\n", msg);
+}
+
 void exit_msg(const char *msg)
 {
     printf(C_G_RED"Error: "C_RES"nm: %s\n", msg);
