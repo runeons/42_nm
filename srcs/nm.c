@@ -101,11 +101,10 @@ void    load_file_in_memory(t_data *dt, char *filename)
         exit_error("close");
 }
 
-void    unload_file_and_clear(t_data *dt)
+void    unload_file_from_memory(t_data *dt)
 {
     if (munmap(dt->ptr, dt->fstat_size) < 0)
         exit_error("munmap");
-    free_all_malloc();
 }
 
 static void    option_h()
@@ -115,11 +114,12 @@ static void    option_h()
     exit(0);
 }
 
-static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
+static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av, int *len)
 {
     int     files_nb;
     char    **files;
     t_lst   *current;
+    int     i;
 
     if (ac < 2)
         option_h();
@@ -136,10 +136,13 @@ static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
     if ((files = (char **)mmalloc(files_nb * sizeof(char *))) == NULL)
         exit_error("Malloc failure");
     current = parsed_cmd->not_options;
-    for (int i = 0; i < files_nb; i++)
+    i = 0;
+    while (current)
     {
         files[i] = (char *)current->content;
         current = current->next;
+        i++;
+        *len = i;
     }
     return (files);
 }
@@ -153,7 +156,7 @@ void    nm(char *filename, int sort, int filter)
     dt.filter = filter;
     load_file_in_memory(&dt, filename);
     nm_wrapper(&dt);
-    unload_file_and_clear(&dt);
+    unload_file_from_memory(&dt);
 }
 
 int     main(int ac, char **av)
@@ -164,20 +167,19 @@ int     main(int ac, char **av)
     int             sort;
     int             filter;
 
-    files = parse_input(&parsed_cmd, ac, av);
-    files_nb = ft_tablen(files);
+    files = parse_input(&parsed_cmd, ac, av, &files_nb);
     if (is_activated_option(parsed_cmd.act_options, 'h'))
         option_h();
     sort = init_options_sort(parsed_cmd.act_options);
     filter = init_options_filter(parsed_cmd.act_options);
-    for (int i = 0; i < ft_tablen(files); i++)
+    for (int i = 0; i < files_nb; i++)
     {
         if (files_nb > 1)
             printf("%s:\n", files[i]);
         nm(files[i], sort, filter);
         if (files_nb > 1)
             printf("\n");
-
     }
+    free_all_malloc();
     return (0);
 }

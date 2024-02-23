@@ -13,4 +13,4 @@ awk '{print $2, $3}' nm1 > nm1_clean
 awk '{print $2, $3}' nm2 > nm2_clean
 
 diff nm1_clean nm2_clean
-# rm nm1_clean nm2_clean
+rm nm1_clean nm2_clean
