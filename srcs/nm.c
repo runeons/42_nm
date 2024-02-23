@@ -2,20 +2,20 @@
 
 Elf64_Sym    *find_symtab(t_data *dt)
 {
-    Elf64_Sym   *symtab;
+    Elf64_Sym   *symtab64;
     
-    if (dt->ehdr)
-        for (int i = 0; i < dt->ehdr->e_shnum; i++)
+    if (dt->ehdr64)
+        for (int i = 0; i < dt->ehdr64->e_shnum; i++)
         {
-            if (dt->shdr[i].sh_type == SHT_SYMTAB)
+            if (dt->shdr64[i].sh_type == SHT_SYMTAB)
             {
-                check_sheader_format(dt->shdr[i]);
-                check_offset_boundaries(dt, dt->shdr[i].sh_offset);
-                if ((symtab = (Elf64_Sym *)((char *)dt->ptr + dt->shdr[i].sh_offset)) == NULL)
+                check_sheader_format(dt->shdr64[i]);
+                check_offset_boundaries(dt, dt->shdr64[i].sh_offset);
+                if ((symtab64 = (Elf64_Sym *)((char *)dt->ptr + dt->shdr64[i].sh_offset)) == NULL)
                     exit_error("find symtab");
                 dt->symtab_index = i;
-                // debug_one_sheader(dt->shdr[i]);
-                return (symtab);
+                // debug_one_sheader(dt->shdr64[i]);
+                return (symtab64);
             }
         }
     return (NULL);
@@ -23,19 +23,19 @@ Elf64_Sym    *find_symtab(t_data *dt)
 
 void init_elf_ptrs(t_data *dt)
 {
-    if ((dt->ehdr = (Elf64_Ehdr *)dt->ptr) == NULL)
+    if ((dt->ehdr64 = (Elf64_Ehdr *)dt->ptr) == NULL)
         exit_error("eheader");
-    // debug_eheader(*dt->ehdr);
-    check_offset_boundaries(dt, dt->ehdr->e_shoff);
-    if ((dt->shdr = (Elf64_Shdr *)((char *)dt->ptr + dt->ehdr->e_shoff)) == NULL)
+    // debug_eheader(*dt->ehdr64);
+    check_offset_boundaries(dt, dt->ehdr64->e_shoff);
+    if ((dt->shdr64 = (Elf64_Shdr *)((char *)dt->ptr + dt->ehdr64->e_shoff)) == NULL)
         exit_error("sheader");
-    // debug_one_sheader(*dt->shdr);
-    if ((dt->sh_strtab = (Elf64_Shdr *)(&dt->shdr[dt->ehdr->e_shstrndx])) == NULL)
+    // debug_one_sheader(*dt->shdr64);
+    if ((dt->sh_strtab64 = (Elf64_Shdr *)(&dt->shdr64[dt->ehdr64->e_shstrndx])) == NULL)
         exit_error("sh_strtab");
-    // debug_one_sheader(*dt->sh_strtab);
-    if ((dt->sh_strtab_p = (char *)(dt->ptr + dt->sh_strtab->sh_offset)) == NULL)
+    // debug_one_sheader(*dt->sh_strtab64);
+    if ((dt->sh_strtab_p = (char *)(dt->ptr + dt->sh_strtab64->sh_offset)) == NULL)
         exit_error("sh_strtab_p");
-    if ((dt->symtab = find_symtab(dt)) == NULL)
+    if ((dt->symtab64 = find_symtab(dt)) == NULL)
         exit_msg("no symbols");
 }
 

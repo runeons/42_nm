@@ -23,27 +23,18 @@
 # define F_NO_DEBUG        3   //
 # define F_ALL             4   // -a
 
-// # if defined(ELF_32)
-//     #define ElfN_Ehdr Elf32_Ehdr
-//     #define ElfN_Shdr Elf32_Shdr
-//     #define ElfN_Sym  Elf32_Sym
-// # elif defined(ELF_64)   
-//     #define ElfN_Ehdr Elf64_Ehdr
-//     #define ElfN_Shdr Elf64_Shdr
-//     #define ElfN_Sym  Elf64_Sym
-
 typedef int (*cmp_function)(const void *a, const void *b);
 
 typedef struct s_type
 {
     char            *section_name;
     char            type;
-    // int             capitalise;
 }              t_type;
 
 typedef struct  s_sym
 {
-    Elf64_Sym       *raw;
+    Elf64_Sym       *raw64;
+    Elf32_Sym       *raw32;
     uint64_t        value;
     char            type;
     char            *name;
@@ -57,12 +48,12 @@ typedef struct  s_data
     t_lst       *act_options;
     int         fstat_size;
     char        *ptr;
-    Elf64_Ehdr  *ehdr;                  // debut ELF
-    Elf64_Shdr  *shdr;                  // debut sections
-    Elf64_Shdr  *sh_strtab;             // section ehdr strtab
+    Elf64_Ehdr  *ehdr64;                  // debut ELF
+    Elf64_Shdr  *shdr64;                  // debut sections
+    Elf64_Shdr  *sh_strtab64;             // section ehdr strtab
     char        *sh_strtab_p;           // debut section strtab
     int         symtab_index;           // index de symtab in shdr
-    Elf64_Sym   *symtab;                // debut symtab
+    Elf64_Sym   *symtab64;                // debut symtab
     t_lst       *syms;
     t_lst       *types;
     int         sort;

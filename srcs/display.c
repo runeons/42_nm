@@ -4,7 +4,6 @@ void    display_one_sym(t_data *dt, t_sym *sym, int filter)
 {
     if (sym)
     {
-        // printf(C_G_RED"[QUICK DEBUG] value: %ld"C_RES"\n", sym->value);
         if (filter == F_UNDEFINED_ONLY)
         {
             if (sym->type != 'U' && sym->type != 'w')
@@ -30,19 +29,18 @@ void    display_one_sym(t_data *dt, t_sym *sym, int filter)
         //     printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
         //     printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
         //     printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
-        //     printf(C_G_RED"               sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
+        //     printf(C_G_RED"               sym->raw64->st_shndx: %d"C_RES"\n", sym->raw64->st_shndx);
         //     printf(C_G_RED"               sym->value: %ld"C_RES"\n", sym->value);
         //     printf(C_G_RED"               sym->type: %d"C_RES"\n", sym->type);
         // }
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
             return ;
-        if (sym->value == 0 && (dt->ehdr->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
+        if (sym->value == 0 && (dt->ehdr64->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
             return ;
-        else if (sym->raw->st_shndx == SHN_UNDEF)
+        else if (sym->raw64->st_shndx == SHN_UNDEF)
             printf("%16c %c %s\n", ' ', sym->type, sym->name);
         else
             printf("%016"PFu_64" %c %s\n", sym->value, sym->type, sym->name);
-        // debug_one_sym(*(sym->raw));
     }
 
 }
