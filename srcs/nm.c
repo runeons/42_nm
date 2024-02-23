@@ -9,7 +9,7 @@ Elf64_Sym    *find_symtab64(t_data *dt)
         {
             if (dt->shdr64[i].sh_type == SHT_SYMTAB)
             {
-                check_sheader_format(dt->shdr64[i]);
+                check_sheader_format64(dt->shdr64[i]);
                 check_offset_boundaries(dt, dt->shdr64[i].sh_offset);
                 if ((symtab64 = (Elf64_Sym *)((char *)dt->ptr + dt->shdr64[i].sh_offset)) == NULL)
                     exit_error("find symtab");
@@ -30,7 +30,7 @@ Elf32_Sym    *find_symtab32(t_data *dt)
         {
             if (dt->shdr32[i].sh_type == SHT_SYMTAB)
             {
-                // check_sheader_format32(dt->shdr32[i]); // TO DO ADD PROTECTION
+                check_sheader_format32(dt->shdr32[i]);
                 check_offset_boundaries(dt, dt->shdr32[i].sh_offset);
                 if ((symtab32 = (Elf32_Sym *)((char *)dt->ptr + dt->shdr32[i].sh_offset)) == NULL)
                     exit_error("find symtab");

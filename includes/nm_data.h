@@ -9,6 +9,10 @@
 # define PFu_16      "hu"
 # define PFu_32      "u"
 # define PFu_64      "lu"
+# define PFx_c8      "hhx"
+# define PFx_16      "hx"
+# define PFx_32      "x"
+# define PFx_64      "lx"
 
 # define ELF_TYPE_UNKNOWN 0
 # define ELF_TYPE_32 1

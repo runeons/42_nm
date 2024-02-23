@@ -46,7 +46,8 @@ int     compare_types(const void *a, const void *b);
 void    sort_syms(t_lst **syms, int sort_type);
 
 // check
-void    check_sheader_format(Elf64_Shdr sh);
+void    check_sheader_format64(Elf64_Shdr sh);
+void    check_sheader_format32(Elf32_Shdr sh);
 void    check_offset_boundaries(t_data *dt, uint64_t offset);
 
 #endif

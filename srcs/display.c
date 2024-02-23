@@ -35,12 +35,24 @@ void    display_one_sym(t_data *dt, t_sym *sym, int filter)
         // }
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
             return ;
-        if (sym->value == 0 && (dt->ehdr64->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
-            return ;
-        else if (sym->raw64->st_shndx == SHN_UNDEF)
-            printf("%16c %c %s\n", ' ', sym->type, sym->name);
-        else
-            printf("%016"PFu_64" %c %s\n", sym->value, sym->type, sym->name);
+        if (dt->arch == ELF_TYPE_64)
+        {
+            if (sym->value == 0 && (dt->ehdr64->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
+                return ;
+            if (sym->raw64->st_shndx == SHN_UNDEF)
+                printf("%16c %c %s\n", ' ', sym->type, sym->name);
+            else
+                printf("%016"PFx_64" %c %s\n", sym->value, sym->type, sym->name);
+        }
+        else if (dt->arch == ELF_TYPE_32)
+        {
+            if (sym->value == 0 && (dt->ehdr32->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
+                return ;
+            if (sym->raw32->st_shndx == SHN_UNDEF)
+                printf("%8c %c %s\n", ' ', sym->type, sym->name);
+            else
+                printf("%08"PFx_64" %c %s\n", sym->value, sym->type, sym->name);
+        }
     }
 
 }
@@ -49,8 +61,6 @@ void    display_syms(t_data *dt, t_lst *syms, int filter)
 {
     t_lst *current = syms;
 
-    // if (current != NULL)
-    //     current = current->next;
     while (current != NULL)
     {
         t_sym *sym = (t_sym *)current->content;
