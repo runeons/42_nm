@@ -13,6 +13,10 @@
 # include <errno.h>
 # include <utils_options.h>
 
+// options
+int     init_options_sort(t_lst *act_options);
+int     init_options_filter(t_lst *act_options);
+
 // exit
 void    exit_error(const char *msg);
 void    exit_corrupted(const char *msg);
@@ -39,7 +43,7 @@ void    display_syms(t_lst *syms);
 int     compare_sym(const void *a, const void *b);
 int     compare_values(const void *a, const void *b);
 int     compare_letters(const void *a, const void *b);
-void    sort_syms(t_lst **syms);
+void    sort_syms(t_lst **syms, int sort_type);
 
 // check
 void    check_sheader_format(Elf64_Shdr sh);

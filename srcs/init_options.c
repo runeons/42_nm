@@ -1,50 +1,31 @@
 #include "nm_functions.h"
 
-void   option_r(t_data *dt)
+int    init_options_sort(t_lst *act_options)
 {
-    if (is_activated_option(dt->act_options, 'r'))
-        dt->sort = S_REVERSE;
+    int sort;
+
+    sort = 0;
+    if (is_activated_option(act_options, 'r'))
+        sort = S_REVERSE;
+    else if (is_activated_option(act_options, 'p'))
+        sort = S_NO_SORT;
     else
-        dt->sort = S_ALPHA;
+        sort = S_ALPHA;
+    return (sort);
 }
 
-void   option_p(t_data *dt)
+int    init_options_filter(t_lst *act_options)
 {
-    if (is_activated_option(dt->act_options, 'p'))
-        dt->sort = S_NO_SORT;
-    else
-        dt->sort = S_ALPHA;
-}
+    int filter;
 
-void   option_a(t_data *dt)
-{
-    if (is_activated_option(dt->act_options, 'a'))
-        dt->filter = F_ALL;
+    filter = 0;
+    if (is_activated_option(act_options, 'a'))
+        filter = F_ALL;
+    else if (is_activated_option(act_options, 'g'))
+        filter = F_EXTERN_ONLY;
+    else if (is_activated_option(act_options, 'u'))
+        filter = F_UNDEFINED_ONLY;
     else
-        dt->filter = F_NO_DEBUG;
-}
-
-void   option_g(t_data *dt)
-{
-    if (is_activated_option(dt->act_options, 'g'))
-        dt->filter = F_EXTERN_ONLY;
-    else
-        dt->filter = F_NO_DEBUG;
-}
-
-void   option_u(t_data *dt)
-{
-    if (is_activated_option(dt->act_options, 'u'))
-        dt->filter = F_UNDEFINED_ONLY;
-    else
-        dt->filter = F_NO_DEBUG;
-}
-
-void    init_options_params(t_data *dt)
-{
-    option_a(dt);
-    option_g(dt);
-    option_r(dt);
-    option_u(dt);
-    option_p(dt);
+        filter = F_NO_DEBUG;
+    return (filter);
 }

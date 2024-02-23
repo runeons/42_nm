@@ -74,7 +74,9 @@ void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so
         // printf("elf_type: %d\n", elf_type);
         init_elf_ptrs(dt);
         read_and_store_syms(dt);
-        sort_syms(&dt->syms);
+        // printf("dt->sort: %d\n", dt->sort);
+        sort_syms(&dt->syms, dt->sort);
+        // printf("dt->sort: %d\n", dt->sort);
         display_syms(dt->syms);
     }
     else
@@ -142,11 +144,13 @@ static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
     return (files);
 }
 
-void    nm(char *filename)
+void    nm(char *filename, int sort, int filter)
 {
     t_data          dt;
 
     ft_memset(&dt, '\0', sizeof(dt));
+    dt.sort = sort;
+    dt.filter = filter;
     load_file_in_memory(&dt, filename);
     nm_wrapper(&dt);
     unload_file_and_clear(&dt);
@@ -157,18 +161,20 @@ int     main(int ac, char **av)
     t_parsed_cmd    parsed_cmd;
     char            **files;
     int             files_nb;
+    int             sort;
+    int             filter;
 
     files = parse_input(&parsed_cmd, ac, av);
     files_nb = ft_tablen(files);
     if (is_activated_option(parsed_cmd.act_options, 'h'))
         option_h();
-    // for (int i = 0; i < ft_tablen(files); i++)
-    //     printf("fichier: %s\n", files[i]);
+    sort = init_options_sort(parsed_cmd.act_options);
+    filter = init_options_filter(parsed_cmd.act_options);
     for (int i = 0; i < ft_tablen(files); i++)
     {
         if (files_nb > 1)
             printf("%s:\n", files[i]);
-        nm(files[i]);
+        nm(files[i], sort, filter);
         if (files_nb > 1)
             printf("\n");
 

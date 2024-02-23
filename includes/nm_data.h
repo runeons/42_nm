@@ -16,8 +16,8 @@
 
 // options
 # define S_ALPHA     1
-# define S_REVERSE   2
-# define S_NO_SORT   3
+# define S_REVERSE   2  // -r
+# define S_NO_SORT   3  // -p
 # define F_EXTERN_ONLY     1
 # define F_UNDEFINED_ONLY  2
 # define F_NO_DEBUG        3
