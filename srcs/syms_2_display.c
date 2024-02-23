@@ -2,16 +2,11 @@
 
 void    display_one_sym(t_sym *sym)
 {
-    if (DEBUG)
+    if (sym)
     {
-        if (sym->value == 0 && sym->letter != 'a')
-            printf("%16c %c %s (%d | %d) %d\n", ' ', sym->letter, sym->name, sym->type, sym->bind, sym->raw->st_shndx);
-        else
-            printf("%016"PFu_64" %c %s (%d | %d) %d\n", sym->value, sym->letter, sym->name, sym->type, sym->bind, sym->raw->st_shndx);
-    }
-    else
-    {
-        if (sym->value == 0 && sym->letter != 'a')
+        if (sym->value == 0 && sym->letter == 'U' && !ft_strcmp(sym->name, ""))
+            return ;
+        else if (sym->value == 0 && sym->letter != 'a')
             printf("%16c %c %s\n", ' ', sym->letter, sym->name);
         else
             printf("%016"PFu_64" %c %s\n", sym->value, sym->letter, sym->name);

@@ -28,6 +28,29 @@ void    copy_back_to_list(t_lst **syms, t_sym **sym_array, int sym_nb)
     }
 }
 
+void    swap(t_sym *a, t_sym *b)
+{
+    t_sym tmp;
+
+    if (a == NULL || b == NULL)
+        exit_corrupted("NULL symbol");
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+void    sort(t_sym **sym_array, int sym_nb, cmp_function cmp)
+{
+    for (int i = 0; i < sym_nb - 1; i++)
+    {
+        for (int j = 0; j < sym_nb - i - 1; j++)
+        {
+            if (cmp(&sym_array[j], &sym_array[j + 1]) > 0)
+                swap(sym_array[j], sym_array[j + 1]);
+        }
+    }
+}
+
 void    sort_syms(t_lst **syms)
 {
     t_sym   **sym_array;
@@ -39,9 +62,9 @@ void    sort_syms(t_lst **syms)
     if (sym_nb > 1)
     {
         sym_array = copy_to_array(syms, sym_nb);
-        qsort(sym_array, sym_nb, sizeof(t_sym *), compare_values);
-        qsort(sym_array, sym_nb, sizeof(t_sym *), compare_letters);
-        qsort(sym_array, sym_nb, sizeof(t_sym *), compare_sym);
+        sort(sym_array, sym_nb, compare_values);
+        sort(sym_array, sym_nb, compare_letters);
+        sort(sym_array, sym_nb, compare_sym);
         copy_back_to_list(syms, sym_array, sym_nb);
     }
 }

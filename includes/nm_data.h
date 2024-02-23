@@ -11,6 +11,8 @@
 # define PFu_32      "u"
 # define PFu_64      "lu"
 
+typedef int (*cmp_function)(const void *a, const void *b);
+
 typedef struct s_type
 {
     char            letter;
