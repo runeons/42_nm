@@ -30,12 +30,12 @@ t_type all_types[] =
 // .note       // note information
 
 
-char    capitalise(char letter, unsigned char bind)
+char    capitalise(char type, unsigned char bind)
 {
     if (bind == STB_LOCAL)
-        return (letter);
+        return (type);
     else if (bind == STB_GLOBAL)
-        return (letter - 32);
+        return (type - 32);
     return '?';
 }
 
@@ -43,59 +43,59 @@ char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
 {
     // printf(C_G_BLUE"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
     if (raw_sym.st_value == 0)
-        if (sym->bind == STB_WEAK) 
+        if (sym->raw_bind == STB_WEAK) 
             return 'w';
-        else if (sym->type == STT_FILE)
+        else if (sym->raw_type == STT_FILE)
             return 'a';
         else
             return 'U';
-    else if (sym->bind == STB_WEAK)
+    else if (sym->raw_bind == STB_WEAK)
         return 'W';
-    else if (sym->type == STT_FUNC)
-        return capitalise('t', sym->bind);
+    else if (sym->raw_type == STT_FUNC)
+        return capitalise('t', sym->raw_bind);
     // printf(C_G_RED"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
     if (sym->section_name)
     {
         if (!ft_strcmp(sym->section_name, ".rodata"))
-            return capitalise('r', sym->bind);
+            return capitalise('r', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".data"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".bss"))
-            return capitalise('b', sym->bind);
+            return capitalise('b', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".fini_array"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".init_array"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".eh_frame"))
-            return capitalise('r', sym->bind);
+            return capitalise('r', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".dynamic"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".eh_frame_hdr"))
-            return capitalise('r', sym->bind);
+            return capitalise('r', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".data.rel.ro"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".got.plt"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".tbss"))
-            return capitalise('b', sym->bind);
+            return capitalise('b', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".got"))
-            return capitalise('d', sym->bind);
+            return capitalise('d', sym->raw_bind);
         if (!ft_strcmp(sym->section_name, ".note.ABI-tag"))
-            return capitalise('r', sym->bind);
+            return capitalise('r', sym->raw_bind);
     }
 
     printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
     printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
-    printf(C_G_BLUE"              sym->type: %d"C_RES"\n", sym->type);
-    printf(C_G_BLUE"              sym->bind: %d"C_RES"\n", sym->bind);
+    printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
+    printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
     printf(C_G_RED"               sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
 
 
-    // if (sym->type == STT_OBJECT)
+    // if (sym->raw_type == STT_OBJECT)
     //     return 'Z';
-    // if (sym->type == STT_COMMON)
+    // if (sym->raw_type == STT_COMMON)
     //     return 'C';
-    // if (sym->type == STT_SECTION)
+    // if (sym->raw_type == STT_SECTION)
     //     return 'Y';
     return '?';
 }
@@ -147,10 +147,10 @@ void    fill_sym(t_data *dt, int index)
         exit_corrupted("fill_sym");
     info = (unsigned char)dt->symtab[index].st_info;
     sym->value          = dt->symtab[index].st_value;
-    sym->type           = ELF64_ST_TYPE((int)info);
-    sym->bind           = ELF64_ST_BIND((int)info);
+    sym->raw_type       = ELF64_ST_TYPE((int)info);
+    sym->raw_bind       = ELF64_ST_BIND((int)info);
     sym->name           = fill_name(dt, sym, index);
     sym->section_name   = get_section_name(dt, sym);
-    sym->letter         = fill_type(dt->symtab[index], sym);
+    sym->type           = fill_type(dt->symtab[index], sym);
     // debug_one_tsym(*sym);
 }

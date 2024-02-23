@@ -36,7 +36,7 @@ typedef int (*cmp_function)(const void *a, const void *b);
 
 typedef struct s_type
 {
-    char            letter;
+    char            type;
     int             capitalise;
     char            *section_name;
     // unsigned char   raw_type;
@@ -47,11 +47,11 @@ typedef struct  s_sym
 {
     Elf64_Sym       *raw;
     uint64_t        value;
-    char            letter;
+    char            type;
     char            *name;
     char            *section_name;
-    unsigned char   type;
-    unsigned char   bind;
+    unsigned char   raw_type;
+    unsigned char   raw_bind;
 }               t_sym;
 
 typedef struct  s_data

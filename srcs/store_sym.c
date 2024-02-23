@@ -30,7 +30,7 @@ int    find_nb_symbols(t_data *dt)
     return (syms_nb);
 }
 
-void    debug_to_fix(t_data *dt, int i)
+void    debug_to_fix(t_data *dt, int i) // CAN DELETE
 {
     if (dt)
     {
@@ -38,7 +38,7 @@ void    debug_to_fix(t_data *dt, int i)
         if (sym_node)
         {
             t_sym *current_sym = (t_sym *)sym_node->content;
-            if (current_sym->letter == 'R')
+            if (current_sym->type == 'R')
             // if (current_sym->raw->st_shndx == 20)
             {
                 printf(C_G_RED"[%s]"C_RES"\n", current_sym->name);

@@ -73,8 +73,8 @@ void    sort_syms(t_lst **syms, int sort_type)
     {
         sym_array = copy_to_array(syms, sym_nb);
         sort(sym_array, sym_nb, compare_values, sort_type);
-        sort(sym_array, sym_nb, compare_letters, sort_type);
-        sort(sym_array, sym_nb, compare_sym, sort_type);
+        sort(sym_array, sym_nb, compare_types, sort_type);
+        sort(sym_array, sym_nb, compare_names, sort_type);
         copy_back_to_list(syms, sym_array, sym_nb);
     }
 }

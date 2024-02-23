@@ -6,20 +6,20 @@ void    display_one_sym(t_sym *sym, int filter)
     {
         if (filter == F_UNDEFINED_ONLY)
         {
-            if (sym->letter != 'U' && sym->letter != 'w')
+            if (sym->type != 'U' && sym->type != 'w')
                 return;
         }
         else if (filter == F_EXTERN_ONLY)
         {
-            if (sym->letter < 'A' || sym->letter > 'Z')
+            if (sym->type < 'A' || sym->type > 'Z')
                 return;
         }
-        if (sym->value == 0 && sym->letter == 'U' && !ft_strcmp(sym->name, ""))
+        if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
             return ;
-        else if (sym->value == 0 && sym->letter != 'a')
-            printf("%16c %c %s\n", ' ', sym->letter, sym->name);
+        else if (sym->value == 0 && sym->type != 'a')
+            printf("%16c %c %s\n", ' ', sym->type, sym->name);
         else
-            printf("%016"PFu_64" %c %s\n", sym->value, sym->letter, sym->name);
+            printf("%016"PFu_64" %c %s\n", sym->value, sym->type, sym->name);
         // debug_one_sym(*(sym->raw));
     }
 

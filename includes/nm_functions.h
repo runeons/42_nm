@@ -40,9 +40,9 @@ void    display_one_sym(t_sym *sym, int filter);
 void    display_syms(t_lst *syms, int filter);
 
 // sort
-int     compare_sym(const void *a, const void *b);
+int     compare_names(const void *a, const void *b);
 int     compare_values(const void *a, const void *b);
-int     compare_letters(const void *a, const void *b);
+int     compare_types(const void *a, const void *b);
 void    sort_syms(t_lst **syms, int sort_type);
 
 // check

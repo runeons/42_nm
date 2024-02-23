@@ -68,7 +68,7 @@ char    *get_raw_sym_name(const void *symbol)
     return (name);
 }
 
-int     compare_sym(const void *a, const void *b)
+int     compare_names(const void *a, const void *b)
 {
     char    *name_a;
     char    *name_b;

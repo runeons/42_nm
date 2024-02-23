@@ -55,9 +55,9 @@ void    debug_one_tsym(t_sym sym)
     printf("\n");
     printf("----------   \n");
     printf("value       : %"PFu_64"\n", sym.value);
-    printf("letter      : %c\n", sym.letter);
+    printf("type        : %c\n", sym.type);
     printf("name        : %s\n", sym.name);
     printf("section_name: %s\n", sym.section_name);
-    printf("type        : %"PFu_c8"\n", sym.type);
-    printf("bind        : %"PFu_c8"\n", sym.bind);
+    printf("type        : %"PFu_c8"\n", sym.raw_type);
+    printf("bind        : %"PFu_c8"\n", sym.raw_bind);
 }
