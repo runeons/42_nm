@@ -27,15 +27,16 @@ char    capitalise(char type, unsigned char bind)
     return '?';
 }
 
-char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
+char    fill_type(t_data *dt, const Elf64_Sym raw_sym, t_sym *sym)
 {
+    // WEAK avant tout
     if (raw_sym.st_value == 0)
     {
         if (sym->raw_bind == STB_WEAK) 
             return 'w';
         else if (sym->raw_type == STT_FILE)
             return 'a';
-        else
+        else if (dt->ehdr->e_type != ET_REL) // ET_REL == .o
             return 'U';
     }
     if (sym->raw_bind == STB_WEAK)
@@ -50,7 +51,8 @@ char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
                 return capitalise(section_types[i].type, sym->raw_bind);
         }
     }
-
+    if (dt->ehdr->e_type == ET_REL)
+        return 'U';
 
     // if (!ft_strcmp(sym->name, "printf"))
     // {
@@ -85,7 +87,7 @@ char    *get_section_name(t_data *dt, t_sym *sym)
     return (section_name);
 }
 
-char    *fill_name(t_data *dt, t_sym *sym, int index)
+char    *fill_name(t_data *dt, t_sym *sym, int index) // simplify
 {
     Elf64_Shdr      symtab_section_h;
     char            *strtab;
@@ -121,6 +123,8 @@ void    fill_sym(t_data *dt, int index)
     sym->raw_bind       = ELF64_ST_BIND((int)info);
     sym->name           = fill_name(dt, sym, index);
     sym->section_name   = get_section_name(dt, sym);
-    sym->type           = fill_type(dt->symtab[index], sym);
+    sym->type           = fill_type(dt, dt->symtab[index], sym);
+    // printf(C_G_RED"[QUICK DEBUG] sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
+
     // debug_one_tsym(*sym);
 }

@@ -1,6 +1,6 @@
 #include <nm_functions.h>
 
-void    display_one_sym(t_sym *sym, int filter)
+void    display_one_sym(t_data *dt, t_sym *sym, int filter)
 {
     if (sym)
     {
@@ -36,7 +36,9 @@ void    display_one_sym(t_sym *sym, int filter)
         // }
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
             return ;
-        else if (sym->value == 0 && (sym->type == 'U' || sym->type == 'w' || sym->type == 'W'))
+        if (sym->value == 0 && (dt->ehdr->e_type == ET_REL) && !ft_strcmp(sym->name, ""))
+            return ;
+        else if (sym->raw->st_shndx == SHN_UNDEF)
             printf("%16c %c %s\n", ' ', sym->type, sym->name);
         else
             printf("%016"PFu_64" %c %s\n", sym->value, sym->type, sym->name);
@@ -45,7 +47,7 @@ void    display_one_sym(t_sym *sym, int filter)
 
 }
 
-void    display_syms(t_lst *syms, int filter)
+void    display_syms(t_data *dt, t_lst *syms, int filter)
 {
     t_lst *current = syms;
 
@@ -54,7 +56,7 @@ void    display_syms(t_lst *syms, int filter)
     while (current != NULL)
     {
         t_sym *sym = (t_sym *)current->content;
-        display_one_sym(sym, filter);
+        display_one_sym(dt, sym, filter);
         current = current->next;
     }   
 }

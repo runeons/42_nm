@@ -36,8 +36,8 @@ void    fill_sym(t_data *dt, int index);
 void    read_and_store_syms(t_data *dt);
 
 // display
-void    display_one_sym(t_sym *sym, int filter);
-void    display_syms(t_lst *syms, int filter);
+void    display_one_sym(t_data *dt, t_sym *sym, int filter);
+void    display_syms(t_data *dt, t_lst *syms, int filter);
 
 // sort
 int     compare_names(const void *a, const void *b);
