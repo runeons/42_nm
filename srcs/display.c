@@ -29,8 +29,8 @@ void    display_syms(t_lst *syms, int filter)
 {
     t_lst *current = syms;
 
-    if (current != NULL)
-        current = current->next;
+    // if (current != NULL)
+    //     current = current->next;
     while (current != NULL)
     {
         t_sym *sym = (t_sym *)current->content;
