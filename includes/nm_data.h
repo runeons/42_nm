@@ -14,11 +14,20 @@
 # define ELF_TYPE_32 1
 # define ELF_TYPE_64 2
 
+// options
+# define S_ALPHA     1
+# define S_REVERSE   2
+# define S_NO_SORT   3
+# define F_EXTERN_ONLY     1
+# define F_UNDEFINED_ONLY  2
+# define F_NO_DEBUG        3
+# define F_ALL             4
+
 // # if defined(ELF_32)
 //     #define ElfN_Ehdr Elf32_Ehdr
 //     #define ElfN_Shdr Elf32_Shdr
 //     #define ElfN_Sym  Elf32_Sym
-// # elif defined(ELF_64)
+// # elif defined(ELF_64)   
 //     #define ElfN_Ehdr Elf64_Ehdr
 //     #define ElfN_Shdr Elf64_Shdr
 //     #define ElfN_Sym  Elf64_Sym
@@ -47,6 +56,7 @@ typedef struct  s_sym
 
 typedef struct  s_data
 {
+    t_lst       *act_options;
     int         fstat_size;
     char        *ptr;
     Elf64_Ehdr  *ehdr;                  // debut ELF
@@ -57,6 +67,8 @@ typedef struct  s_data
     Elf64_Sym   *symtab;                // debut symtab
     t_lst       *syms;
     t_lst       *types;
+    int         sort;
+    int         filter;
 }					t_data;
 
 #endif

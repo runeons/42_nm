@@ -11,6 +11,7 @@
 # include <utils_colors.h>
 # include <nm_data.h>
 # include <errno.h>
+# include <utils_options.h>
 
 // exit
 void    exit_error(const char *msg);

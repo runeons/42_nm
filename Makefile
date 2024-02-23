@@ -49,6 +49,8 @@ SRCS_LIST					=	\
 							syms_1_sort_letter.c \
 							syms_1_sort_sym.c \
 							syms_2_display.c \
+							init_options.c \
+							utils_options.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
 

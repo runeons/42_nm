@@ -106,9 +106,24 @@ void    unload_file_and_clear(t_data *dt)
     free_all_malloc();
 }
 
+static void    option_h()
+{
+    display_help();
+    free_all_malloc();
+    exit(0);
+}
+
+static void    parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
+{
+    if (ac < 2)
+        option_h();
+    *parsed_cmd = parse_options(ac, av);
+    // debug_activated_options(parsed_cmd->act_options);
+}
+
 void    nm(char *filename)
 {
-    t_data      dt;
+    t_data          dt;
 
     ft_memset(&dt, '\0', sizeof(dt));
     load_file_in_memory(&dt, filename);
@@ -118,6 +133,11 @@ void    nm(char *filename)
 
 int     main(int ac, char **av)
 {
+    t_parsed_cmd    parsed_cmd;
+
+    parse_input(&parsed_cmd, ac, av);
+    if (is_activated_option(parsed_cmd.act_options, 'h'))
+        option_h();
     if (ac == 1)
         nm("a.out");
     else if (ac >= 10)
