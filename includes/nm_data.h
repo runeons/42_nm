@@ -3,13 +3,25 @@
 
 # define ELF_MAGIC   0x464c457f
 # define PF_PADDING  16
-# define DEBUG       0
  
 # define PFsizeof    "lu"
 # define PFu_c8      "hhu"
 # define PFu_16      "hu"
 # define PFu_32      "u"
 # define PFu_64      "lu"
+
+# define ELF_TYPE_UNKNOWN 0
+# define ELF_TYPE_32 1
+# define ELF_TYPE_64 2
+
+// # if defined(ELF_32)
+//     #define ElfN_Ehdr Elf32_Ehdr
+//     #define ElfN_Shdr Elf32_Shdr
+//     #define ElfN_Sym  Elf32_Sym
+// # elif defined(ELF_64)
+//     #define ElfN_Ehdr Elf64_Ehdr
+//     #define ElfN_Shdr Elf64_Shdr
+//     #define ElfN_Sym  Elf64_Sym
 
 typedef int (*cmp_function)(const void *a, const void *b);
 
