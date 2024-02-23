@@ -18,10 +18,10 @@
 # define S_ALPHA     1
 # define S_REVERSE   2  // -r
 # define S_NO_SORT   3  // -p
-# define F_EXTERN_ONLY     1
-# define F_UNDEFINED_ONLY  2
-# define F_NO_DEBUG        3
-# define F_ALL             4
+# define F_EXTERN_ONLY     1   // -g
+# define F_UNDEFINED_ONLY  2   // -u
+# define F_NO_DEBUG        3   //
+# define F_ALL             4   // -a
 
 // # if defined(ELF_32)
 //     #define ElfN_Ehdr Elf32_Ehdr

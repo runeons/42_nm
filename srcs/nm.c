@@ -77,7 +77,7 @@ void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so
         // printf("dt->sort: %d\n", dt->sort);
         sort_syms(&dt->syms, dt->sort);
         // printf("dt->sort: %d\n", dt->sort);
-        display_syms(dt->syms);
+        display_syms(dt->syms, dt->filter);
     }
     else
         exit_msg("file format not recognized");

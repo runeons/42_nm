@@ -1,9 +1,19 @@
 #include <nm_functions.h>
 
-void    display_one_sym(t_sym *sym)
+void    display_one_sym(t_sym *sym, int filter)
 {
     if (sym)
     {
+        if (filter == F_UNDEFINED_ONLY)
+        {
+            if (sym->letter != 'U' && sym->letter != 'w')
+                return;
+        }
+        else if (filter == F_EXTERN_ONLY)
+        {
+            if (sym->letter < 'A' || sym->letter > 'Z')
+                return;
+        }
         if (sym->value == 0 && sym->letter == 'U' && !ft_strcmp(sym->name, ""))
             return ;
         else if (sym->value == 0 && sym->letter != 'a')
@@ -15,7 +25,7 @@ void    display_one_sym(t_sym *sym)
 
 }
 
-void    display_syms(t_lst *syms)
+void    display_syms(t_lst *syms, int filter)
 {
     t_lst *current = syms;
 
@@ -24,7 +34,7 @@ void    display_syms(t_lst *syms)
     while (current != NULL)
     {
         t_sym *sym = (t_sym *)current->content;
-        display_one_sym(sym);
+        display_one_sym(sym, filter);
         current = current->next;
     }   
 }
