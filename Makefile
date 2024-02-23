@@ -4,11 +4,9 @@
 
 NAME					= 	ft_nm
 
-CC						= 	gcc -g3
+CC						= 	gcc
 
-FFLAGS					=   -fsanitize=address
-
-LFLAGS					=   -fsanitize=leak
+FFLAGS					=   -fsanitize=address -g3
 
 CFLAGS					= 	-I includes/ \
 							-I libft/includes/ \
@@ -16,8 +14,6 @@ CFLAGS					= 	-I includes/ \
 
 INC_LIB					= 	-I libft
 LIB						= 	-L libft -lft
-
-NAME_TESTER				=	tester
 
 
 # *** PROJECT HEADER ********************************************************* #
@@ -80,17 +76,6 @@ fsan:  $(OBJS) $(SRCS)
 	@ make -C libft/
 	@ $(CC) $(CFLAGS) $(FFLAGS) $(HDIR) $(OBJS) $(INC_LIB) $(LIB) -o $(NAME)
 
-leak:  $(OBJS) $(SRCS)
-	@ make -C libft/
-	@ $(CC) $(CFLAGS) $(LFLAGS) $(HDIR) $(OBJS) $(INC_LIB) $(LIB) -o $(NAME)
-
-tester:
-	@ make -C libft/
-	@ $(CC) $(CFLAGS) srcs/simple_tester.c $(HDIR) $(INC_LIB) $(LIB) -o $(NAME_TESTER)
-
-tclean:
-	@ rm -rf $(NAME_TESTER)
-
 clean:
 	@ make clean -C libft/
 	@ rm -rf $(OBJS_DIR)
@@ -102,8 +87,6 @@ fclean:
 
 re: fclean all
 
-test: tclean tester
-
 rfsan: fclean fsan
 
-.PHONY: all re clean fclean tester tclean test fsan rfsan leak
+.PHONY: all re clean fclean fsan rfsan
