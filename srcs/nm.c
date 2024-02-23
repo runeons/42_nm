@@ -95,7 +95,7 @@ int    get_file_type(t_data *dt)
     }
 }
 
-void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so
+void    nm_wrapper(t_data *dt)
 {
     int magic;
 

@@ -116,7 +116,7 @@ char    *get_section_name64(t_data *dt, t_sym *sym)
     return (section_name);
 }
 
-char    *fill_name64(t_data *dt, t_sym *sym, int index) // simplify
+char    *fill_name64(t_data *dt, t_sym *sym, int index)
 {
     Elf64_Shdr      symtab_section_h;
     char            *strtab;
@@ -128,13 +128,13 @@ char    *fill_name64(t_data *dt, t_sym *sym, int index) // simplify
         exit_corrupted("shdr index out-of-band");
     check_offset_boundaries(dt, dt->shdr64[symtab_section_h.sh_link].sh_offset);
     strtab = (char *)(dt->ptr + dt->shdr64[symtab_section_h.sh_link].sh_offset);
-    if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab64[index].st_name) + 1)) == NULL) // should I check name format and len
+    if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab64[index].st_name) + 1)) == NULL)
         exit_error("fill_name\n");
-    ft_strcpy(sym->name, strtab + dt->symtab64[index].st_name); // TO DO use ft_strncpy
+    ft_strcpy(sym->name, strtab + dt->symtab64[index].st_name);
     return (sym->name);
 }
 
-char    *fill_name32(t_data *dt, t_sym *sym, int index) // simplify
+char    *fill_name32(t_data *dt, t_sym *sym, int index)
 {
     Elf32_Shdr      symtab_section_h;
     char            *strtab;
@@ -146,9 +146,9 @@ char    *fill_name32(t_data *dt, t_sym *sym, int index) // simplify
         exit_corrupted("shdr index out-of-band");
     check_offset_boundaries(dt, dt->shdr32[symtab_section_h.sh_link].sh_offset);
     strtab = (char *)(dt->ptr + dt->shdr32[symtab_section_h.sh_link].sh_offset);
-    if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab32[index].st_name) + 1)) == NULL) // should I check name format and len
+    if ((sym->name  = mmalloc(ft_strlen(strtab + dt->symtab32[index].st_name) + 1)) == NULL)
         exit_error("fill_name\n");
-    ft_strcpy(sym->name, strtab + dt->symtab32[index].st_name); // TO DO use ft_strncpy
+    ft_strcpy(sym->name, strtab + dt->symtab32[index].st_name);
     return (sym->name);
 }
 
