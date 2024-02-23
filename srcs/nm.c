@@ -89,7 +89,7 @@ void    load_file_in_memory(t_data *dt, char *filename)
     fd = 0;
     ft_memset(&buf, '\0', sizeof(buf));
     if ((fd = open(filename, O_RDONLY)) < 0)
-        exit_error("open");
+        exit_error(filename);
     if (fstat(fd, &buf) < 0)
         exit_error_close("fstat", fd);
     if ((dt->ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
@@ -113,12 +113,33 @@ static void    option_h()
     exit(0);
 }
 
-static void    parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
+static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av)
 {
+    int     files_nb;
+    char    **files;
+    t_lst   *current;
+
     if (ac < 2)
         option_h();
     *parsed_cmd = parse_options(ac, av);
     // debug_activated_options(parsed_cmd->act_options);
+    files_nb = ft_lst_size(parsed_cmd->not_options);
+    if (files_nb == 0)
+    {
+        if ((files = (char **)mmalloc(1 * sizeof(char *))) == NULL)
+            exit_error("Malloc failure");
+        files[0] = ft_strdup("a.out");
+        return (files);
+    }
+    if ((files = (char **)mmalloc(files_nb * sizeof(char *))) == NULL)
+        exit_error("Malloc failure");
+    current = parsed_cmd->not_options;
+    for (int i = 0; i < files_nb; i++)
+    {
+        files[i] = (char *)current->content;
+        current = current->next;
+    }
+    return (files);
 }
 
 void    nm(char *filename)
@@ -134,16 +155,23 @@ void    nm(char *filename)
 int     main(int ac, char **av)
 {
     t_parsed_cmd    parsed_cmd;
+    char            **files;
+    int             files_nb;
 
-    parse_input(&parsed_cmd, ac, av);
+    files = parse_input(&parsed_cmd, ac, av);
+    files_nb = ft_tablen(files);
     if (is_activated_option(parsed_cmd.act_options, 'h'))
         option_h();
-    if (ac == 1)
-        nm("a.out");
-    else if (ac >= 10)
-        exit_error("too many files");
-    else
-        for (int i = 1; i < ac; i++)
-            nm(av[i]);
+    // for (int i = 0; i < ft_tablen(files); i++)
+    //     printf("fichier: %s\n", files[i]);
+    for (int i = 0; i < ft_tablen(files); i++)
+    {
+        if (files_nb > 1)
+            printf("%s:\n", files[i]);
+        nm(files[i]);
+        if (files_nb > 1)
+            printf("\n");
+
+    }
     return (0);
 }

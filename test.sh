@@ -1,13 +1,13 @@
 #!/bin/bash
 
-$FILE="a.out"
+FILE="a.out"
 
-if [ $# -ne 1 ]; then
+if [ $# -eq 1 ]; then
     FILE="$1"
 fi
 
-./ft_nm "$1" > nm1
-nm -a "$1" > nm2
+./ft_nm "$FILE" > nm1
+nm -a "$FILE" > nm2
 
 awk '{print $2, $3}' nm1 > nm1_clean
 awk '{print $2, $3}' nm2 > nm2_clean

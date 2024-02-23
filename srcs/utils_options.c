@@ -36,7 +36,7 @@ static int get_name_max_len()
 
 void    display_extra_short_usage()
 {
-    printf("Usage: %s [OPTION...] HOST\n", CMD_NAME);
+    printf("Usage: %s [OPTION...] FILE...\n", CMD_NAME);
 }
 
 void    display_short_usage()
