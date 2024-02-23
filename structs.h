@@ -167,7 +167,8 @@ E_TYPE
 #define ET_LOPROC       0xff00          /* Processor-specific range start */
 #define ET_HIPROC       0xffff          /* Processor-specific range end */
 
-
+exit_error = STT_FUNC 2 et STB_GLOBAL 1         .text
+exit_corrupted = STT_FUNC 2 et STB_GLOBAL 1     .text
 
 // t_type all_types[] =
 // {
