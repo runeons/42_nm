@@ -166,3 +166,35 @@ E_TYPE
 #define ET_HIOS         0xfeff          /* OS-specific range end */
 #define ET_LOPROC       0xff00          /* Processor-specific range start */
 #define ET_HIPROC       0xffff          /* Processor-specific range end */
+
+
+
+// t_type all_types[] =
+// {
+//     {'b', 1, ".bss",             },//  -1, -1// bss uninitializes
+//     {'d', 1, ".data",            },//  -1, -1// initialized
+//     {'g', 1, "",                 },//  -1, -1// initialized for small objects
+//     {'p', 0, "",                 },//  -1, -1// stack unwind
+//     {'r', 1, ".rodata",          },//  -1, -1// read only 
+//     {'s', 1, "",                 },//  -1, -1// uninitialized or zero-initialized data section for small objects
+//     {'t', 1, ".text",            },//  -1, -1// executable text (code) section
+//     {'a', -1, "",                 },//  -1, -1// ? capitalise type - STT_FILE
+//     {'A', -1, "",                 },//  -1, -1// ? capitalise absolute
+//     {'C', 0, "",                 },//  -1, -1// common (inc. uninitialized)
+//     {'i', 0, "",                 },//  -1, -1// indirect functions
+//     {'N', 0, ".debug",           },//  -1, -1// debug
+//     {'u', 0, "",                 },//  -1, -1// unique global
+//     {'U', 0, "",                 },//  -1, -1// undefined
+//     {'v', 1, "",                 },//  -1, -1// weak object
+//     {'w', 1, "",                 },//  -1, -1// weak symbol not weak object
+//     {'-', 0, "",                 },//  -1, -1// stabs symbol
+//     {'?', 0, "",                 },//  -1, -1// unknown
+// };
+
+
+// // not used PREDEFINED USER sections = 
+// .comment    // comment
+// .init       // runtime initialization instructions
+// .line       // line # info for symbolic debugging
+// .note       // note information
+

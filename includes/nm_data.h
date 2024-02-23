@@ -36,11 +36,9 @@ typedef int (*cmp_function)(const void *a, const void *b);
 
 typedef struct s_type
 {
-    char            type;
-    int             capitalise;
     char            *section_name;
-    // unsigned char   raw_type;
-    // unsigned char   raw_bind;
+    char            type;
+    // int             capitalise;
 }              t_type;
 
 typedef struct  s_sym

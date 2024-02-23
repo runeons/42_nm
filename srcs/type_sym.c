@@ -1,34 +1,21 @@
 #include <nm_functions.h>
 
-t_type all_types[] =
+t_type section_types[] =
 {
-    {'b', 1, ".bss",             },//  -1, -1// bss uninitializes
-    {'d', 1, ".data",            },//  -1, -1// initialized
-    {'g', 1, "",                 },//  -1, -1// initialized for small objects
-    {'p', 0, "",                 },//  -1, -1// stack unwind
-    {'r', 1, ".rodata",          },//  -1, -1// read only 
-    {'s', 1, "",                 },//  -1, -1// uninitialized or zero-initialized data section for small objects
-    {'t', 1, ".text",            },//  -1, -1// executable text (code) section
-    {'a', -1, "",                 },//  -1, -1// ? capitalise type - STT_FILE
-    {'A', -1, "",                 },//  -1, -1// ? capitalise absolute
-    {'C', 0, "",                 },//  -1, -1// common (inc. uninitialized)
-    {'i', 0, "",                 },//  -1, -1// indirect functions
-    {'N', 0, ".debug",           },//  -1, -1// debug
-    {'u', 0, "",                 },//  -1, -1// unique global
-    {'U', 0, "",                 },//  -1, -1// undefined
-    {'v', 1, "",                 },//  -1, -1// weak object
-    {'w', 1, "",                 },//  -1, -1// weak symbol not weak object
-    {'-', 0, "",                 },//  -1, -1// stabs symbol
-    {'?', 0, "",                 },//  -1, -1// unknown
+    {".rodata",                  'r'},
+    {".data",                    'd'},
+    {".bss",                     'b'},
+    {".fini_array",              'd'},
+    {".init_array",              'd'},
+    {".eh_frame",                'r'},
+    {".dynamic",                 'd'},
+    {".eh_frame_hdr",            'r'},
+    {".data.rel.ro",             'd'},
+    {".got.plt",                 'd'},
+    {".tbss",                    'b'},
+    {".got",                     'd'},
+    {".note.ABI-tag",            'r'},
 };
-
-
-// not used PREDEFINED USER sections = 
-// .comment    // comment
-// .init       // runtime initialization instructions
-// .line       // line # info for symbolic debugging
-// .note       // note information
-
 
 char    capitalise(char type, unsigned char bind)
 {
@@ -41,7 +28,6 @@ char    capitalise(char type, unsigned char bind)
 
 char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
 {
-    // printf(C_G_BLUE"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
     if (raw_sym.st_value == 0)
         if (sym->raw_bind == STB_WEAK) 
             return 'w';
@@ -53,35 +39,14 @@ char    fill_type(const Elf64_Sym raw_sym, t_sym *sym)
         return 'W';
     else if (sym->raw_type == STT_FUNC)
         return capitalise('t', sym->raw_bind);
-    // printf(C_G_RED"[QUICK DEBUG] sym->section_name: %s"C_RES"\n", sym->section_name);
     if (sym->section_name)
     {
-        if (!ft_strcmp(sym->section_name, ".rodata"))
-            return capitalise('r', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".data"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".bss"))
-            return capitalise('b', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".fini_array"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".init_array"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".eh_frame"))
-            return capitalise('r', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".dynamic"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".eh_frame_hdr"))
-            return capitalise('r', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".data.rel.ro"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".got.plt"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".tbss"))
-            return capitalise('b', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".got"))
-            return capitalise('d', sym->raw_bind);
-        if (!ft_strcmp(sym->section_name, ".note.ABI-tag"))
-            return capitalise('r', sym->raw_bind);
+        for (size_t i = 0; i < ARRAY_SIZE(section_types); i++)
+        {
+            if (!ft_strcmp(sym->section_name, section_types[i].section_name))
+                return capitalise(section_types[i].type, sym->raw_bind);
+        }
+
     }
 
     printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
