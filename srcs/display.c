@@ -8,10 +8,19 @@ void    display_one_sym(t_sym *sym, int filter)
         {
             if (sym->type != 'U' && sym->type != 'w')
                 return;
+            if (sym->type == 'a')
+                return;
         }
         else if (filter == F_EXTERN_ONLY)
         {
             if ((sym->type < 'A' || sym->type > 'Z') && sym->type != 'w')
+                return;
+            if (sym->type == 'a')
+                return;
+        }
+        else if (filter == F_NO_DEBUG)
+        {
+            if (sym->type == 'a')
                 return;
         }
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
