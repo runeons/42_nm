@@ -40,16 +40,16 @@ SRCS_DIR					=	./srcs/
 
 SRCS_LIST					=	\
 							check.c \
+							cmp_names.c \
+							cmp_types.c \
 							debug.c \
+							display.c \
 							exit.c \
-							nm.c \
-							syms_0_store.c \
-							syms_0_type.c \
-							syms_1_sort_general.c \
-							syms_1_sort_letter.c \
-							syms_1_sort_sym.c \
-							syms_2_display.c \
 							init_options.c \
+							nm.c \
+							sort_syms.c \
+							store_sym.c \
+							type_sym.c \
 							utils_options.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))
