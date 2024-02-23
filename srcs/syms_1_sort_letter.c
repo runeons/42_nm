@@ -43,5 +43,5 @@ int     compare_values(const void *a, const void *b)
 
     value_a = get_value(a);
     value_b = get_value(b);
-    return (value_b - value_a);
+    return (value_a - value_b);
 }

@@ -38,7 +38,7 @@ void    remove_special_chars(char **name)
     *result = '\0';
 }
 
-char    *get_cleaned_sym_str(const void *symbol)
+char    *get_cleaned_sym_name(const void *symbol)
 {
     t_sym   *sym;
     char    *name;
@@ -54,12 +54,30 @@ char    *get_cleaned_sym_str(const void *symbol)
     return (name);
 }
 
+char    *get_raw_sym_name(const void *symbol)
+{
+    t_sym   *sym;
+    char    *name;
+    
+    if (symbol == NULL)
+        exit_corrupted("NULL symbol");
+    sym = *(t_sym **)symbol;
+    if (sym == NULL)
+        exit_corrupted("NULL symbol");
+    name = ft_strdup(sym->name);
+    return (name);
+}
+
 int     compare_sym(const void *a, const void *b)
 {
-    char *name_a;
-    char *name_b;
+    char    *name_a;
+    char    *name_b;
+    int     cmp;
 
-    name_a = get_cleaned_sym_str(a);
-    name_b = get_cleaned_sym_str(b);
+    name_a = get_cleaned_sym_name(a);
+    name_b = get_cleaned_sym_name(b);
+    cmp = ft_strcmp(name_a, name_b);
+    if (cmp == 0)
+        return (ft_strcmp(get_raw_sym_name(a), get_raw_sym_name(b)));
     return (ft_strcmp(name_a, name_b));
 }
