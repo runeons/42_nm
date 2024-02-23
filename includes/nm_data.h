@@ -51,13 +51,19 @@ typedef struct  s_data
     Elf64_Ehdr  *ehdr64;                  // debut ELF
     Elf64_Shdr  *shdr64;                  // debut sections
     Elf64_Shdr  *sh_strtab64;             // section ehdr strtab
-    char        *sh_strtab_p;           // debut section strtab
-    int         symtab_index;           // index de symtab in shdr
+    char        *sh_strtab_p;             // debut section strtab
+    int         symtab_index;             // index de symtab in shdr
     Elf64_Sym   *symtab64;                // debut symtab
     t_lst       *syms;
     t_lst       *types;
     int         sort;
     int         filter;
+    int         arch;
+    Elf32_Ehdr  *ehdr32;                  // debut ELF
+    Elf32_Shdr  *shdr32;                  // debut sections
+    Elf32_Shdr  *sh_strtab32;             // section ehdr strtab
+    Elf32_Sym   *symtab32;                // debut symtab
+
 }					t_data;
 
 #endif

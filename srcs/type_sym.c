@@ -125,7 +125,4 @@ void    fill_sym(t_data *dt, int index)
     sym->name           = fill_name(dt, sym, index);
     sym->section_name   = get_section_name(dt, sym);
     sym->type           = fill_type(dt, dt->symtab64[index], sym);
-    // printf(C_G_RED"[QUICK DEBUG] sym->raw64->st_shndx: %d"C_RES"\n", sym->raw64->st_shndx);
-
-    // debug_one_tsym(*sym);
 }
