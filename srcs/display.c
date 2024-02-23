@@ -11,7 +11,7 @@ void    display_one_sym(t_sym *sym, int filter)
         }
         else if (filter == F_EXTERN_ONLY)
         {
-            if (sym->type < 'A' || sym->type > 'Z')
+            if ((sym->type < 'A' || sym->type > 'Z') && sym->type != 'w')
                 return;
         }
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
