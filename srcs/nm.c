@@ -121,16 +121,15 @@ static char **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av, int *len)
     t_lst   *current;
     int     i;
 
-    if (ac < 2)
-        option_h();
     *parsed_cmd = parse_options(ac, av);
-    // debug_activated_options(parsed_cmd->act_options);
     files_nb = ft_lst_size(parsed_cmd->not_options);
     if (files_nb == 0)
     {
         if ((files = (char **)mmalloc(1 * sizeof(char *))) == NULL)
             exit_error("Malloc failure");
         files[0] = ft_strdup("a.out");
+        ft_lst_add_node_back(&parsed_cmd->not_options, ft_lst_create_node(files[0]));
+        *len = 1;
         return (files);
     }
     if ((files = (char **)mmalloc(files_nb * sizeof(char *))) == NULL)

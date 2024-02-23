@@ -16,6 +16,7 @@ t_type section_types[] =
     {".got",                     'd'},
     {".note.ABI-tag",            'r'},
     {".group",                   'n'},
+    {".preinit_array",           'd'},
 };
 
 char    capitalise(char type, unsigned char bind)
@@ -56,11 +57,11 @@ char    fill_type(t_data *dt, const Elf64_Sym raw_sym, t_sym *sym)
 
     // if (!ft_strcmp(sym->name, "printf"))
     // {
-    //     printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
-    //     printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
-    //     printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
-    //     printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
-    //     printf(C_G_RED"               sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
+        // printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
+        // printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
+        // printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
+        // printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
+        // printf(C_G_RED"               sym->raw->st_shndx: %d"C_RES"\n", sym->raw->st_shndx);
     // }
 
     // if (sym->raw_type == STT_OBJECT)
