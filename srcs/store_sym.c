@@ -64,8 +64,8 @@ void    read_and_store_syms(t_data *dt)
 
     for (int i = 0; i < syms_nb; i++)
     {
-        create_new_sym(dt, i); // could improve and return new sym instead of using index
-        fill_sym(dt, i);       // so that I can use it here and skip double checking
+        create_new_sym(dt, i);
+        fill_sym(dt, i);
     }
 }
 
