@@ -39,13 +39,39 @@ void init_elf_ptrs(t_data *dt)
         exit_msg("no symbols");
 }
 
+int    get_file_type(t_data *dt)
+{
+    Elf64_Ehdr *header;
+    
+    if ((header = (Elf64_Ehdr *)dt->ptr) == NULL)
+        exit_error("init header");
+    if (header->e_ident[EI_CLASS] == ELFCLASS32)
+    {
+        printf("x32 file\n");
+        return (ELF_TYPE_32);
+    }
+    else if (header->e_ident[EI_CLASS] == ELFCLASS64)
+    {
+        printf("x64 file\n");
+        return (ELF_TYPE_64);
+    }
+    else
+    {
+        exit_corrupted("Unknown file type");
+        return (ELF_TYPE_UNKNOWN);
+    }
+}
+
 void    nm_wrapper(t_data *dt) // 86_32, x64, object files, .so
 {
     int magic;
+    // int elf_type;
 
     magic = *(int *)dt->ptr;
     if (magic == ELF_MAGIC)
     {
+        // elf_type = get_file_type(dt);
+        // printf("elf_type: %d\n", elf_type);
         init_elf_ptrs(dt);
         read_and_store_syms(dt);
         sort_syms(&dt->syms);
