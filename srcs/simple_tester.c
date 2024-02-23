@@ -75,7 +75,11 @@ void clean(char *file, char *res ,int *size)
     {
         // check_line_format(line);
         int n = ft_strlen(line) - 16;
+        if (n <= 1)
+            exit_err("error in file content\n");
         strncpy(&res[i], line + 17, n);
+        if ((i + n - 1) < 0 || (i + n - 1) > (int)ft_strlen(res))
+            exit_err("error in index\n");
         res[i + n - 1] = '\n';
         // free(line);
         i += n;
