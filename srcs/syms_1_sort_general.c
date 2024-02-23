@@ -47,7 +47,7 @@ void    sort(t_sym **sym_array, int sym_nb, cmp_function cmp, int sort_type)
         {
             if (sort_type == S_REVERSE)
             {
-                if (cmp(&sym_array[j], &sym_array[j + 1]) > 0)
+                if (cmp(&sym_array[j], &sym_array[j + 1]) < 0)
                     swap(sym_array[j], sym_array[j + 1]);
             }
             else
