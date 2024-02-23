@@ -17,6 +17,7 @@ t_type section_types[] =
     {".note.ABI-tag",            'r'},
     {".group",                   'n'},
     {".preinit_array",           'd'},
+    {".data.rel.local",          'd'},
 };
 
 char    capitalise(char type, unsigned char bind)
@@ -68,22 +69,14 @@ char    fill_type(t_data *dt, t_sym *sym)
     }
     if (dt->ehdr64->e_type == ET_REL)
         return 'U';
-
-    // if (!ft_strcmp(sym->name, "printf"))
+    // if (!ft_strcmp(sym->name, "section_types"))
     // {
-        // printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
-        // printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
-        // printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
-        // printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
-        // printf(C_G_RED"               sym->raw64->st_shndx: %d"C_RES"\n", sym->raw64->st_shndx);
+    //     printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
+    //     printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);
+    //     printf(C_G_BLUE"              sym->raw_type: %d"C_RES"\n", sym->raw_type);
+    //     printf(C_G_BLUE"              sym->raw_bind: %d"C_RES"\n", sym->raw_bind);
+    //     printf(C_G_RED"               sym->raw64->st_shndx: %d"C_RES"\n", sym->raw64->st_shndx);
     // }
-
-    // if (sym->raw_type == STT_OBJECT)
-    //     return 'Z';
-    // if (sym->raw_type == STT_COMMON)
-    //     return 'C';
-    // if (sym->raw_type == STT_SECTION)
-    //     return 'Y';
     return '?';
 }
 
