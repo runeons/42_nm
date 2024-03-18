@@ -4,7 +4,7 @@
 
 NAME					= 	ft_nm
 
-CC						= 	gcc
+CC						= 	gcc -g3
 
 FFLAGS					=   -fsanitize=address -g3
 
@@ -42,6 +42,8 @@ SRCS_LIST					=	\
 							display.c \
 							exit.c \
 							init_options.c \
+							init_parsing.c \
+							init_ptrs.c \
 							nm.c \
 							sort_syms.c \
 							store_sym.c \

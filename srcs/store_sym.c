@@ -1,6 +1,6 @@
 #include <nm_functions.h>
 
-void    create_new_sym(t_data *dt, int index)
+static void     create_new_sym(t_data *dt, int index)
 {
     t_sym *new_sym = NULL;
 
@@ -15,7 +15,7 @@ void    create_new_sym(t_data *dt, int index)
     ft_lst_add_node_back(&dt->syms, ft_lst_create_node(new_sym));
 }
 
-int    find_nb_symbols64(t_data *dt)
+static int      find_nb_symbols_64(t_data *dt)
 {
     int         syms_nb;
     Elf64_Shdr  symtab_section_h;
@@ -33,7 +33,7 @@ int    find_nb_symbols64(t_data *dt)
     return (syms_nb);
 }
 
-int    find_nb_symbols32(t_data *dt)
+static int      find_nb_symbols_32(t_data *dt)
 {
     int         syms_nb;
     Elf32_Shdr  symtab_section_h;
@@ -51,14 +51,14 @@ int    find_nb_symbols32(t_data *dt)
     return (syms_nb);
 }
 
-void    read_and_store_syms(t_data *dt)
+void            read_and_store_syms(t_data *dt)
 {
     int syms_nb;
 
     if (dt->arch == ELF_TYPE_32)
-        syms_nb = find_nb_symbols32(dt);
+        syms_nb = find_nb_symbols_32(dt);
     else if (dt->arch == ELF_TYPE_64)
-        syms_nb = find_nb_symbols64(dt);
+        syms_nb = find_nb_symbols_64(dt);
     if (syms_nb == 0)
         exit_msg("No symbols");
 

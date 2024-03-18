@@ -18,6 +18,7 @@ t_type section_types[] =
     {".group",                   'n'},
     {".preinit_array",           'd'},
     {".data.rel.local",          'd'},
+    {".jcr",                     'd'},
 };
 
 char    capitalise(char type, unsigned char bind)
@@ -67,9 +68,13 @@ char    fill_type(t_data *dt, t_sym *sym)
                 return capitalise(section_types[i].type, sym->raw_bind);
         }
     }
-    if (dt->ehdr64->e_type == ET_REL)
-        return 'U';
-    // if (!ft_strcmp(sym->name, "section_types"))
+    if (dt->arch == ELF_TYPE_64)
+        if (dt->ehdr64->e_type == ET_REL)
+            return 'U';
+    if (dt->arch == ELF_TYPE_32)
+        if (dt->ehdr32->e_type == ET_REL)
+            return 'U';
+    // if (!ft_strcmp(sym->name, "esection_types"))
     // {
     //     printf(C_G_BLUE"[QUICK DEBUG] sym->name: %s"C_RES"\n", sym->name);
     //     printf(C_G_BLUE"              sym->section_name: %s"C_RES"\n", sym->section_name);

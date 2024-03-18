@@ -50,4 +50,9 @@ void    check_sheader_format64(Elf64_Shdr sh);
 void    check_sheader_format32(Elf32_Shdr sh);
 void    check_offset_boundaries(t_data *dt, uint64_t offset);
 
+// init
+void    init_elf_ptrs_64(t_data *dt);
+void    init_elf_ptrs_32(t_data *dt);
+char    **parse_input(t_parsed_cmd *parsed_cmd, int ac, char **av, int *len);
+
 #endif
