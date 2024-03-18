@@ -12,3 +12,4 @@ archives/
 libft/libft.a
 libft/objs/
 .vscode/
+test_*
