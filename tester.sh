@@ -27,18 +27,6 @@ FILES=(
     "./bin/easy64"
     "./bin/easy32"
     "./bin/easy_test"
-    "./objs/check.o"
-    "./objs/cmp_names.o"
-    "./objs/cmp_types.o"
-    "./objs/debug.o"
-    "./objs/display.o"
-    "./objs/exit.o"
-    "./objs/init_options.o"
-    "./objs/nm.o"
-    "./objs/sort_syms.o"
-    "./objs/store_sym.o"
-    "./objs/type_sym.o"
-    "./objs/utils_options.o"
     "./bin/not_so_easy_test32.o"
     "./bin/not_so_easy_test32_obj.o"
 
@@ -51,6 +39,7 @@ FILES=(
 )
 
 # FILES+=(./bin/*)
+FILES+=(./objs/*)
 
 
 if [ $# -eq 1 ]; then

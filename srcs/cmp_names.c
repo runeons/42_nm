@@ -1,6 +1,6 @@
 #include <nm_functions.h>
 
-void    lower_if_needed(char **name)
+static void     lower_if_needed(char **name)
 {
     size_t len = ft_strlen(*name);
 
@@ -11,7 +11,7 @@ void    lower_if_needed(char **name)
     }
 }
 
-int    is_special_char(char c)
+static int      is_special_char(char c)
 {
     if (c >= 33 && c <= 126)
     {
@@ -21,7 +21,7 @@ int    is_special_char(char c)
 	return (1);
 }
 
-void    remove_special_chars(char **name)
+static void     remove_special_chars(char **name)
 {
     char *current = *name;
     char *result  = *name;
@@ -38,7 +38,7 @@ void    remove_special_chars(char **name)
     *result = '\0';
 }
 
-char    *get_cleaned_sym_name(const void *symbol)
+static char    *get_cleaned_sym_name(const void *symbol)
 {
     t_sym   *sym;
     char    *name;
@@ -54,7 +54,7 @@ char    *get_cleaned_sym_name(const void *symbol)
     return (name);
 }
 
-char    *get_raw_sym_name(const void *symbol)
+static char    *get_raw_sym_name(const void *symbol)
 {
     t_sym   *sym;
     char    *name;
@@ -68,7 +68,7 @@ char    *get_raw_sym_name(const void *symbol)
     return (name);
 }
 
-int     compare_names(const void *a, const void *b)
+int             compare_names(const void *a, const void *b)
 {
     char    *name_a;
     char    *name_b;

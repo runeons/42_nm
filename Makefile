@@ -35,19 +35,20 @@ HEADER					=	\
 SRCS_DIR					=	./srcs/
 
 SRCS_LIST					=	\
-							check.c \
+							00_read.c \
+							01_fill.c \
+							02_type.c \
+							03_sort.c \
+							04_display.c \
 							cmp_names.c \
 							cmp_types.c \
-							debug.c \
-							display.c \
-							exit.c \
 							init_options.c \
 							init_parsing.c \
 							init_ptrs.c \
 							nm.c \
-							sort_syms.c \
-							store_sym.c \
-							type_sym.c \
+							utils_check.c \
+							utils_debug.c \
+							utils_exit.c \
 							utils_options.c \
 
 SRCS					=	$(addprefix $(SRCS_DIR), $(SRCS_LIST))

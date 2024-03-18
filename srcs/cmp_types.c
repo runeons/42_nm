@@ -1,6 +1,6 @@
 #include <nm_functions.h>
 
-char    get_type(const void *symbol)
+static char         get_type(const void *symbol)
 {
     t_sym   *sym;
     
@@ -13,7 +13,7 @@ char    get_type(const void *symbol)
     return (sym->type);
 }
 
-int     compare_types(const void *a, const void *b)
+int          compare_types(const void *a, const void *b)
 {
     char    letter_a;
     char    letter_b;
@@ -23,7 +23,7 @@ int     compare_types(const void *a, const void *b)
     return (letter_a - letter_b);
 }
 
-uint64_t    get_value(const void *symbol)
+static uint64_t     get_value(const void *symbol)
 {
     t_sym   *sym;
     
@@ -36,7 +36,7 @@ uint64_t    get_value(const void *symbol)
     return (sym->value);
 }
 
-int     compare_values(const void *a, const void *b)
+int                 compare_values(const void *a, const void *b)
 {
     char    value_a;
     char    value_b;

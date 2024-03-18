@@ -1,6 +1,6 @@
 #include <nm_functions.h>
 
-t_sym   **copy_to_array(t_lst **syms, int sym_nb)
+static t_sym    **copy_to_array(t_lst **syms, int sym_nb)
 {
     t_sym   **sym_array;
     t_lst   *current;
@@ -16,7 +16,7 @@ t_sym   **copy_to_array(t_lst **syms, int sym_nb)
     return (sym_array);
 }
 
-void    copy_back_to_list(t_lst **syms, t_sym **sym_array, int sym_nb)
+static void     copy_back_to_list(t_lst **syms, t_sym **sym_array, int sym_nb)
 {
     t_lst   *current;
 
@@ -28,7 +28,7 @@ void    copy_back_to_list(t_lst **syms, t_sym **sym_array, int sym_nb)
     }
 }
 
-void    swap(t_sym *a, t_sym *b)
+static void     swap(t_sym *a, t_sym *b)
 {
     t_sym tmp;
 
@@ -39,7 +39,7 @@ void    swap(t_sym *a, t_sym *b)
     *b = tmp;
 }
 
-void    sort(t_sym **sym_array, int sym_nb, cmp_function cmp, int sort_type)
+static void     sort(t_sym **sym_array, int sym_nb, cmp_function cmp, int sort_type)
 {
     for (int i = 0; i < sym_nb - 1; i++)
     {
@@ -59,7 +59,7 @@ void    sort(t_sym **sym_array, int sym_nb, cmp_function cmp, int sort_type)
     }
 }
 
-void    sort_syms(t_lst **syms, int sort_type)
+void            sort_syms(t_lst **syms, int sort_type)
 {
     t_sym   **sym_array;
     int     sym_nb;
