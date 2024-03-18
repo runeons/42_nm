@@ -23,23 +23,24 @@ FILES=(
     "./bin/not_so_easy_test"
     "./bin/not_so_easy_test.o"
     "./ft_nm"
+    "./a.out"
     "./bin/not_so_easy_test64_obj.o"
     "./bin/easy64"
     "./bin/easy32"
     "./bin/easy_test"
     "./bin/not_so_easy_test32.o"
     "./bin/not_so_easy_test32_obj.o"
+    "./bin/header_offset_error"
+    "./bin/error_header"
 
     # TO CLEAN
-    # "./bin/header_offset_error"
-    # "./bin/error_header"
     # "/usr/bin/docker-proxy"
 
     # TO FIX
 )
 
 # FILES+=(./bin/*)
-FILES+=(./objs/*)
+# FILES+=(./objs/*)
 
 
 if [ $# -eq 1 ]; then

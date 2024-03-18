@@ -13,9 +13,9 @@ static void     lower_if_needed(char **name)
 
 static int      is_special_char(char c)
 {
-    if (c >= 33 && c <= 126)
+    if (c >= '!' && c <= '~')
     {
-        if (ft_isalnum(c))
+        if (ft_isalnum(c) || (c == '$'))
 		    return (0);
     }
 	return (1);

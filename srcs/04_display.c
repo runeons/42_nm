@@ -33,6 +33,8 @@ void    display_one_sym(t_data *dt, t_sym *sym, int filter)
         //     printf(C_G_RED"               sym->value: %ld"C_RES"\n", sym->value);
         //     printf(C_G_RED"               sym->type: %d"C_RES"\n", sym->type);
         // }
+        if (!ft_strcmp(sym->name, ""))
+            return;
         if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))
             return ;
         if (dt->arch == ELF_TYPE_64)

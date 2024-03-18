@@ -19,6 +19,14 @@ t_type section_types[] =
     {".preinit_array",           'd'},
     {".data.rel.local",          'd'},
     {".jcr",                     'd'},
+    {".go.buildinfo",            'd'},
+    {".noptrbss",                'b'},
+    {".noptrdata",               'd'},
+};
+
+t_type section_starts_types[] =
+{
+    {".data.rel.ro",             'd'},
 };
 
 char    capitalise(char type, unsigned char bind)
@@ -66,6 +74,11 @@ char    compute_type(t_data *dt, t_sym *sym)
         {
             if (!ft_strcmp(sym->section_name, section_types[i].section_name))
                 return capitalise(section_types[i].type, sym->raw_bind);
+        }
+        for (size_t i = 0; i < ARRAY_SIZE(section_starts_types); i++)
+        {
+            if (!ft_strncmp(sym->section_name, section_starts_types[i].section_name, ft_strlen(section_starts_types[i].section_name)))
+                return capitalise(section_starts_types[i].type, sym->raw_bind);
         }
     }
     if (dt->arch == ELF_TYPE_64)
