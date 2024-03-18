@@ -28,6 +28,8 @@ static int      apply_filter(t_sym *sym, int filter)
             return 1;
         if (sym->type == 'a')
             return 1;
+        if (sym->name && sym->name[0] == '.')
+            return 1;
     }
     else if (filter == F_EXTERN_ONLY)
     {
@@ -35,10 +37,14 @@ static int      apply_filter(t_sym *sym, int filter)
             return 1;
         if (sym->type == 'a')
             return 1;
+        if (sym->name && sym->name[0] == '.')
+            return 1;
     }
     else if (filter == F_NO_DEBUG)
     {
         if (sym->type == 'a')
+            return 1;
+        if (sym->name && sym->name[0] == '.')
             return 1;
     }
     return 0;
@@ -46,6 +52,8 @@ static int      apply_filter(t_sym *sym, int filter)
 
 static int      exception(t_sym *sym)
 {
+    if (sym->value == 0 && sym->type == 'a')
+        return 0;
     if (!ft_strcmp(sym->name, ""))
         return 1;
     if (sym->value == 0 && sym->type == 'U' && !ft_strcmp(sym->name, ""))

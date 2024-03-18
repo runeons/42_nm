@@ -84,7 +84,8 @@ void            fill_sym(t_data *dt, int index)
         sym->raw_bind       = ELF64_ST_BIND((int)info);
         sym->name           = fill_name_64(dt, sym, index);
         sym->section_name   = get_section_name_64(dt, sym);
-
+        if (sym->raw_type == ET_DYN && !ft_strcmp(sym->name, ""))
+            sym->name = ft_strdup(sym->section_name);
     }
     else if (dt->arch == ELF_TYPE_32)
     {
@@ -94,7 +95,8 @@ void            fill_sym(t_data *dt, int index)
         sym->raw_bind       = ELF32_ST_BIND((int)info);
         sym->name           = fill_name_32(dt, sym, index);
         sym->section_name   = get_section_name_32(dt, sym);
-
+        if (sym->raw_type == ET_DYN && !ft_strcmp(sym->name, ""))
+            sym->name = ft_strdup(sym->section_name);
     }
     sym->type               = compute_type(dt, sym);
 }
