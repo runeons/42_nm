@@ -1,12 +1,12 @@
 #include <nm_functions.h>
 
-void    check_sheader_format64(Elf64_Shdr sh)
+void    check_sheader_format_64(Elf64_Shdr sh)
 {
     if (sh.sh_type > 5 || sh.sh_addralign % 8 != 0)
         exit_corrupted("corruption in sheaders");
 }
 
-void    check_sheader_format32(Elf32_Shdr sh)
+void    check_sheader_format_32(Elf32_Shdr sh)
 {
     if (sh.sh_type > 5 || sh.sh_addralign % 4 != 0)
         exit_corrupted("corruption in sheaders");

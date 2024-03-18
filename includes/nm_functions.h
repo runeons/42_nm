@@ -26,7 +26,6 @@ void    init_elf_ptrs_32(t_data *dt);
 void    read_and_store_syms(t_data *dt);
 void    fill_sym(t_data *dt, int index);
 char    compute_type(t_data *dt, t_sym *sym);
-void    display_one_sym(t_data *dt, t_sym *sym, int filter);
 void    display_syms(t_data *dt, t_lst *syms, int filter);
 
 // sort
@@ -36,8 +35,8 @@ int     compare_types(const void *a, const void *b);
 void    sort_syms(t_lst **syms, int sort_type);
 
 // check
-void    check_sheader_format64(Elf64_Shdr sh);
-void    check_sheader_format32(Elf32_Shdr sh);
+void    check_sheader_format_64(Elf64_Shdr sh);
+void    check_sheader_format_32(Elf32_Shdr sh);
 void    check_offset_boundaries(t_data *dt, uint64_t offset);
 
 // debug
