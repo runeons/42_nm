@@ -1,7 +1,9 @@
 .vscode/
 a.out*
 nm1
+nm1_a
 nm2
+nm2_a
 ft_nm
 bin/
 objs/
