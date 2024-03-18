@@ -10,15 +10,14 @@ t_option allowed_options[] =
     {'u', "undefined-only", 0, "",  NULL, "Display only undefined symbols (those external to each object file)"},
 };
 
-void exit_error_args(const char *msg, ...)
+
+void exit_error_options(const char *msg)
 {
-    va_list args;
-    va_start(args, msg);
-    vfprintf(stderr, msg, args);
-    va_end(args);
+    printf("Error: nm: %s\n", msg);
     free_all_malloc();
     exit(1);
 }
+
 
 static int get_name_max_len()
 {
@@ -185,7 +184,7 @@ static t_option *check_option(char **av, int i)
         return (res);
     else if (ft_strlen(av[i]) > 2 && (res = is_allowed_option_long(av[i])) != NULL)
         return (res);
-    exit_error_args("traceroute: error in pattern near %s\n", av[i]);
+    exit_error_options("nm: error in option\n");
     return (NULL);
 }
 
@@ -204,10 +203,10 @@ t_parsed_cmd   parse_options(int ac, char **av)
             if (res->need_param)
             {
                 if (++i == ac)
-                    exit_error_args("traceroute: option '%s' requires an argument\nTry 'traceroute --help' for more information.\n", res->name);
+                    exit_error_options("nm: option requires an argument\nTry 'nm --help' for more information.\n");
                 res->param = ft_strdup(av[i]);
                 if (res->param == NULL)
-                    exit_error_args("traceroute: malloc failure.\n");
+                    exit_error_options("nm: malloc failure.\n");
             }
             ft_lst_add_node_back(&act_options, ft_lst_create_node(res));
         }
