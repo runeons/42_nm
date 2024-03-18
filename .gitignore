@@ -1,15 +1,10 @@
+.vscode/
 a.out*
-a32
 nm1
 nm2
 ft_nm
-tester
-tmp*
 bin/
-bin_corrupted/
 objs/
-archives/
 libft/libft.a
 libft/objs/
-.vscode/
-test_*
+tests/
