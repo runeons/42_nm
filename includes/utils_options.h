@@ -5,7 +5,7 @@
 # include <libft.h>
 
 # define ARRAY_SIZE(arr)    (sizeof(arr) / sizeof((arr)[0])) // int option_count = ARRAY_SIZE(allowed_options);
-# define CMD_NAME           "nm"
+# define CMD_NAME           "ft_nm"
 
 typedef struct s_parsed_cmd
 {
