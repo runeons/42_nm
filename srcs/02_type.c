@@ -71,8 +71,6 @@ char    compute_type(t_data *dt, t_sym *sym)
                 return 'w';
             else if (sym->raw_type == STT_FILE)
                 return 'a';
-            // else if (sym->raw_type == STT_FUNC && ft_strcmp(sym->name, "main"))
-            //     return 'U';
             else if (dt->ehdr64->e_type != ET_REL && ft_strcmp(sym->name, ".comment")) // ET_REL == .o
                 return 'U';
         }
@@ -85,8 +83,6 @@ char    compute_type(t_data *dt, t_sym *sym)
                 return 'w';
             else if (sym->raw_type == STT_FILE)
                 return 'a';
-            // else if (sym->raw_type == STT_FUNC && ft_strcmp(sym->name, "main"))
-            //     return 'U';
             else if (dt->ehdr32->e_type != ET_REL && ft_strcmp(sym->name, ".comment")) // ET_REL == .o
                 return 'U';
         }

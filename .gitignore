@@ -1,12 +1,7 @@
 .vscode/
-a.out*
-nm1
-nm1_a
-nm2
-nm2_a
-ft_nm
-bin/
 objs/
 libft/libft.a
 libft/objs/
-tests/
+ft_nm
+a.out
+bin/
